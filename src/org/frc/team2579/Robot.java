@@ -5,9 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.usfirst.frc.team2579.robot;
+package org.frc.team2579;
+
+import org.frc.team2579.Robot.OperationMode;
+import org.frc.team2579.subsystems.DriveTrain;
+import org.frc.team2579.subsystems.Intake;
+import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
+import org.frc.team2579.utility.ControlLooper;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,20 +26,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends IterativeRobot {
-	private static final String kDefaultAuto = "Default";
+	
+	public static final DriveTrain driveTrain = new DriveTrain();
+	public static final Intake intake = new Intake();
+/*	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();
+	private SendableChooser<String> m_chooser = new SendableChooser<>();*/
+	
+	public static final ControlLooper controlLoop = new ControlLooper("Main control loop", 10);
+	public static OI oi;
 
+	public static enum OperationMode {
+		TEST, COMPETITION
+	};
+
+	public static OperationMode operationMode = OperationMode.COMPETITION;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
-		m_chooser.addDefault("Default Auto", kDefaultAuto);
+		controlLoop.addLoopable(driveTrain);
+		
+/*		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
-		SmartDashboard.putData("Auto choices", m_chooser);
+		SmartDashboard.putData("Auto choices", m_chooser);*/
 	}
 
 	/**
@@ -48,10 +68,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autoSelected = m_chooser.getSelected();
+		/*m_autoSelected = m_chooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
-		System.out.println("Auto selected: " + m_autoSelected);
+		System.out.println("Auto selected: " + m_autoSelected);*/
 	}
 
 	/**
@@ -59,7 +79,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		switch (m_autoSelected) {
+		/*switch (m_autoSelected) {
 			case kCustomAuto:
 				// Put custom auto code here
 				break;
@@ -68,13 +88,21 @@ public class Robot extends IterativeRobot {
 				// Put default auto code here
 				break;
 		}
+		*/
 	}
 
+	
+	public void teleopInit() {
+		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
+		driveTrain.setPeriodMs(10);
+		controlLoop.start();
+	}
 	/**
 	 * This function is called periodically during operator control.
 	 */
 	@Override
 	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
 	}
 
 	/**
@@ -82,5 +110,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+	
+	public void disabledPeriodic() {
+		Scheduler.getInstance().run();
 	}
 }
