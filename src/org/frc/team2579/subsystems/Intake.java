@@ -13,8 +13,8 @@ public class Intake extends Subsystem {
 		UP, DOWN
 	};
 
-	public static final double INTAKE_LOAD_SPEED = 0.7;
-	public static final double INTAKE_EJECT_SPEED = -0.8;
+	public static final double INTAKE_LOAD_SPEED = 0.4;
+	public static final double INTAKE_EJECT_SPEED = -0.4;
 
 	private static DoubleSolenoid leftIntakePiston, rightIntakePiston;
 	private Spark leftIntake, rightIntake;
@@ -22,7 +22,7 @@ public class Intake extends Subsystem {
 	public Intake() {
 		try {
 			leftIntake = new Spark(RobotMap.LEFT_INTAKE_PWM);
-			rightIntake = new Spark(RobotMap.LEFT_INTAKE_PWM);
+			rightIntake = new Spark(RobotMap.RIGHT_INTAKE_PWM);
 
 			//leftIntakePiston = new DoubleSolenoid(RobotMap.LEFT_INTAKE_DOWN_PCM_ID,RobotMap.LEFT_INTAKE_UP_PCM_ID);
 			//rightIntakePiston = new DoubleSolenoid(RobotMap.RIGHT_INTAKE_DOWN_PCM_ID,RobotMap.RIGHT_INTAKE_UP_PCM_ID);
@@ -32,7 +32,7 @@ public class Intake extends Subsystem {
 	}
 
 	public void setSpeed(double speed) {
-		leftIntake.set(-speed);
+		leftIntake.set(speed);
 		rightIntake.set(speed);
 	}
 

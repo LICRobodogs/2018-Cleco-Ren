@@ -7,16 +7,14 @@
 
 package org.frc.team2579;
 
-import org.frc.team2579.Robot.OperationMode;
 import org.frc.team2579.subsystems.DriveTrain;
 import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the

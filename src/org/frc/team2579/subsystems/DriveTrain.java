@@ -1,31 +1,19 @@
 package org.frc.team2579.subsystems;
 
-import java.util.*;
-
 //import org.frc.team2579.utility.CANTalonEncoder;
 import org.frc.team2579.OI;
 import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 
-import com.kauailabs.navx.frc.AHRS;
-import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
-import com.ctre.CANTalon.TalonControlMode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import org.frc.team2579.utility.ControlLoopable;
 
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static enum DriveTrainControlMode {
@@ -136,7 +124,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1,
 				DRIVER_JOY1_C2, DRIVER_JOY1_C3);*/
 
-		m_drive.arcadeDrive(-m_moveInput, -m_steerInput, true);
+		m_drive.arcadeDrive(m_moveInput, m_steerInput, true);
 	}
 
 	public void setControlMode(DriveTrainControlMode controlMode, double speed) {
