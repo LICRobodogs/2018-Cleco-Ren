@@ -1,5 +1,6 @@
 package org.frc.team2579;
 
+import org.frc.team2579.commands.IntakeDown;
 import org.frc.team2579.commands.IntakeSpeed;
 import org.frc.team2579.commands.IntakeSpeedOff;
 import org.frc.team2579.commands.IntakeUp;
