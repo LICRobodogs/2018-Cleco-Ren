@@ -13,8 +13,8 @@ public class Intake extends Subsystem {
 		UP, DOWN
 	};
 
-	public static final double INTAKE_LOAD_SPEED = 0.4;
-	public static final double INTAKE_EJECT_SPEED = -0.4;
+	public static final double INTAKE_LOAD_SPEED = 0.65;
+	public static final double INTAKE_EJECT_SPEED = -0.35;
 
 	private static DoubleSolenoid leftIntakePiston, rightIntakePiston;
 	private Spark leftIntake, rightIntake;
@@ -32,8 +32,8 @@ public class Intake extends Subsystem {
 	}
 
 	public void setSpeed(double speed) {
-		leftIntake.set(speed);
-		rightIntake.set(speed);
+		leftIntake.set(-speed);
+		rightIntake.set(-speed);
 	}
 
 	@Override

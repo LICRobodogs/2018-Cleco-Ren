@@ -19,13 +19,13 @@ public class OI {
 		m_driverGamepad = new GamePad(RobotMap.DRIVER_GAMEPAD_USB_ID);
 		m_operatorGamepad = new GamePad(RobotMap.OPERATOR_GAMEPAD_USB_ID);
 		
-		JoystickButton intakeIn = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.LEFT_BUMPER_BUTTON);
-        intakeIn.whileHeld(new IntakeSpeed(Intake.INTAKE_LOAD_SPEED));
-        intakeIn.whenReleased(new IntakeSpeedOff());
-        
-        JoystickButton intakeOut = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.RIGHT_BUMPER_BUTTON);
+		JoystickButton intakeOut = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.LEFT_BUMPER_BUTTON);
         intakeOut.whileHeld(new IntakeSpeed(Intake.INTAKE_EJECT_SPEED));
         intakeOut.whenReleased(new IntakeSpeedOff());
+        
+        JoystickButton intakeIn = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.RIGHT_BUMPER_BUTTON);
+        intakeIn.whileHeld(new IntakeSpeed(Intake.INTAKE_LOAD_SPEED));
+        intakeIn.whenReleased(new IntakeSpeedOff());
         
         JoystickButton intakeUp = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.START_BUTTON);
         intakeUp.whileActive(new IntakeUp());
