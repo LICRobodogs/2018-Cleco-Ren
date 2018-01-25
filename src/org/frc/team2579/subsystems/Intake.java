@@ -24,8 +24,8 @@ public class Intake extends Subsystem {
 			leftIntake = new Spark(RobotMap.LEFT_INTAKE_PWM);
 			rightIntake = new Spark(RobotMap.RIGHT_INTAKE_PWM);
 
-			//leftIntakePiston = new DoubleSolenoid(RobotMap.LEFT_INTAKE_DOWN_PCM_ID,RobotMap.LEFT_INTAKE_UP_PCM_ID);
-			//rightIntakePiston = new DoubleSolenoid(RobotMap.RIGHT_INTAKE_DOWN_PCM_ID,RobotMap.RIGHT_INTAKE_UP_PCM_ID);
+			leftIntakePiston = new DoubleSolenoid(RobotMap.LEFT_INTAKE_DOWN_PCM_ID,RobotMap.LEFT_INTAKE_UP_PCM_ID);
+			rightIntakePiston = new DoubleSolenoid(RobotMap.RIGHT_INTAKE_DOWN_PCM_ID,RobotMap.RIGHT_INTAKE_UP_PCM_ID);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Intake constructor");
 		}
@@ -54,7 +54,7 @@ public class Intake extends Subsystem {
 		return leftIntakePiston.get() == Value.kReverse;
 	}
 
-	public void setLeftIntakePiston(IntakePistonState state) {
+	public void setIntakePiston(IntakePistonState state) {
 		if(state == IntakePistonState.DOWN) {
 			leftIntakePiston.set(Value.kForward);
 			rightIntakePiston.set(Value.kForward);

@@ -2,6 +2,7 @@ package org.frc.team2579;
 
 import org.frc.team2579.commands.IntakeSpeed;
 import org.frc.team2579.commands.IntakeSpeedOff;
+import org.frc.team2579.commands.IntakeUp;
 import org.frc.team2579.controller.GamePad;
 import org.frc.team2579.subsystems.Intake;
 
@@ -24,6 +25,12 @@ public class OI {
         JoystickButton intakeOut = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.RIGHT_BUMPER_BUTTON);
         intakeOut.whileHeld(new IntakeSpeed(Intake.INTAKE_EJECT_SPEED));
         intakeOut.whenReleased(new IntakeSpeedOff());
+        
+        JoystickButton intakeUp = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.START_BUTTON);
+        intakeUp.whileActive(new IntakeUp());
+        
+        JoystickButton intakeDown = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.BACK_BUTTON);
+        intakeDown.whileActive(new IntakeDown());
 	}
 
 	public GamePad getDriverGamepad() {
