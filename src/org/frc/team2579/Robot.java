@@ -7,13 +7,14 @@
 
 package org.frc.team2579;
 
+import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.DriveTrain;
 import org.frc.team2579.subsystems.Intake;
+import org.frc.team2579.subsystems.Arm.ArmControlMode;
 import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 
 /**
@@ -27,6 +28,7 @@ public class Robot extends IterativeRobot {
 	
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final Intake intake = new Intake();
+	public static final Arm arm = new Arm();
 /*	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
@@ -47,7 +49,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		controlLoop.addLoopable(driveTrain);
-		
+		controlLoop.addLoopable(arm);
 /*		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);*/
@@ -92,6 +94,7 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopInit() {
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
+		Robot.arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
 		controlLoop.start();
 	}

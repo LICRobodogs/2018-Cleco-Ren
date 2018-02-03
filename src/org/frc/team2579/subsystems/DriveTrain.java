@@ -124,7 +124,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1,
 				DRIVER_JOY1_C2, DRIVER_JOY1_C3);*/
 
-		m_drive.arcadeDrive(m_moveInput, -m_steerInput, true);
+		m_drive.curvatureDrive(m_moveInput, -m_steerInput, true);
 	}
 
 	public void setControlMode(DriveTrainControlMode controlMode, double speed) {

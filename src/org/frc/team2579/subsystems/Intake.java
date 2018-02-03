@@ -5,27 +5,28 @@ import org.frc.team2579.RobotMap;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Intake extends Subsystem {
 	public static enum IntakePistonState {
-		UP, DOWN
+		UP, DOWN, IN, OUT
 	};
 
 	public static final double INTAKE_LOAD_SPEED = 0.65;
 	public static final double INTAKE_EJECT_SPEED = -0.35;
 
-	private static DoubleSolenoid leftIntakePiston, rightIntakePiston;
+	private static DoubleSolenoid intakePiston;
+	private static Solenoid innerWheelPiston;
 	private Spark leftIntake, rightIntake;
 
 	public Intake() {
 		try {
 			leftIntake = new Spark(RobotMap.LEFT_INTAKE_PWM);
 			rightIntake = new Spark(RobotMap.RIGHT_INTAKE_PWM);
-
-			leftIntakePiston = new DoubleSolenoid(RobotMap.LEFT_INTAKE_DOWN_PCM_ID,RobotMap.LEFT_INTAKE_UP_PCM_ID);
-			rightIntakePiston = new DoubleSolenoid(RobotMap.RIGHT_INTAKE_DOWN_PCM_ID,RobotMap.RIGHT_INTAKE_UP_PCM_ID);
+			innerWheelPiston = new Solenoid(1,RobotMap.INTAKE_WHEEL_PCM2_ID);
+			intakePiston = new DoubleSolenoid(RobotMap.INTAKE_DOWN_PCM_ID,RobotMap.INTAKE_UP_PCM_ID);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Intake constructor");
 		}
@@ -46,26 +47,24 @@ public class Intake extends Subsystem {
 		}
 	}
 
-	public static boolean getLeftIntake() {
-		return leftIntakePiston.get() == Value.kReverse;
-	}
-	
-	public static boolean getRightIntake() {
-		return leftIntakePiston.get() == Value.kReverse;
+	public static boolean isIntakeUp() {
+		return intakePiston.get() == Value.kReverse;
 	}
 
 	public void setIntakePiston(IntakePistonState state) {
 		if(state == IntakePistonState.DOWN) {
-			leftIntakePiston.set(Value.kForward);
-			rightIntakePiston.set(Value.kForward);
+			intakePiston.set(Value.kForward);
 		} else if(state == IntakePistonState.UP) {
-			leftIntakePiston.set(Value.kReverse);
-			rightIntakePiston.set(Value.kReverse);
+			intakePiston.set(Value.kReverse);
+		} else if(state == IntakePistonState.IN){
+			innerWheelPiston.set(true);
+		} else if(state == IntakePistonState.OUT){
+			innerWheelPiston.set(false);
 		}
 	}
 	
 	public void shootPowercube(){
-		if(getLeftIntake() && getRightIntake())
+		if(isIntakeUp())
 			setSpeed(-.7);
 		else 
 			setSpeed(0);

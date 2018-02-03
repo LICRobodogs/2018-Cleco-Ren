@@ -20,15 +20,23 @@ public class RobotMap {
 	public static final int LEFT_INTAKE_PWM = 0;
 	public static final int RIGHT_INTAKE_PWM = 1;                                       
 
-	public static final int ARM_MOTOR1_CAN_ID = 2;
-	public static final int ARM_MOTOR2_CAN_ID = 2;
-	public static final int ARM_MOTOR3_CAN_ID = 3;
+	public static final int ARM_TALON1_CAN_ID = 2;
+	public static final int ARM_VICTOR1_CAN_ID = 2;
+	public static final int ARM_VICTOR2_CAN_ID = 3;
 
 	// PNEUMATICS
-	public static final int RIGHT_INTAKE_UP_PCM_ID = 7;
-	public static final int RIGHT_INTAKE_DOWN_PCM_ID = 0;
+	public static final int INTAKE_UP_PCM_ID = 7;
+	public static final int INTAKE_DOWN_PCM_ID = 0;
 	
-	public static final int LEFT_INTAKE_UP_PCM_ID = 4;
-	public static final int LEFT_INTAKE_DOWN_PCM_ID = 3;
+	public static final int INTAKE_WHEEL_PCM2_ID = 1;
+	
+	public static final int CLAW_IN_PCM_ID = 1;
+	public static final int CLAW_OUT_PCM_ID = 6;
+	
+	public static final int SHOOT_IN_PCM_ID = 2;
+	public static final int SHOOT_OUT_PCM_ID = 5;
+	
+	public static final int SHIFT_IN_PCM_ID = 3;
+	public static final int SHIFT_OUT_PCM_ID = 4;
 
 }
