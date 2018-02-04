@@ -3,12 +3,14 @@ package org.frc.team2579;
 import org.frc.team2579.commands.ArmPistonPosition;
 import org.frc.team2579.commands.ArmPosition;
 import org.frc.team2579.commands.IntakeDown;
+import org.frc.team2579.commands.IntakeInnerWheelPosition;
 import org.frc.team2579.commands.IntakeSpeed;
 import org.frc.team2579.commands.IntakeSpeedOff;
 import org.frc.team2579.commands.IntakeUp;
 import org.frc.team2579.controller.GamePad;
 import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.Intake;
+import org.frc.team2579.subsystems.Intake.IntakePistonState;
 import org.frc.team2579.subsystems.Arm.ArmControlMode;
 import org.frc.team2579.subsystems.Arm.ArmPistonState;
 
@@ -32,16 +34,22 @@ public class OI {
         intakeIn.whileHeld(new IntakeSpeed(Intake.INTAKE_LOAD_SPEED));
         intakeIn.whenReleased(new IntakeSpeedOff());
         
-        JoystickButton intakeUp = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.LEFT_TRIGGER_AXIS);
+        JoystickButton intakeUp = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.BACK_BUTTON);
         intakeUp.whileActive(new IntakeUp());
         
-        JoystickButton intakeDown = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.RIGHT_TRIGGER_AXIS);
+        JoystickButton intakeDown = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.START_BUTTON);
         intakeDown.whileActive(new IntakeDown());
         
-        JoystickButton armReload = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.LEFT_TRIGGER_AXIS);
+        JoystickButton intakeInnerIn = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.A_BUTTON);
+        intakeInnerIn.whileActive(new IntakeInnerWheelPosition(IntakePistonState.IN));
+        
+        JoystickButton intakeInnerOut = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.Y_BUTTON);
+        intakeInnerOut.whileActive(new IntakeInnerWheelPosition(IntakePistonState.OUT));
+        
+        JoystickButton armReload = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
         armReload.whileActive(new ArmPistonPosition(ArmPistonState.RELOAD));
         
-        JoystickButton armShoot = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.RIGHT_TRIGGER_AXIS);
+        JoystickButton armShoot = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
         armShoot.whileActive(new ArmPistonPosition(ArmPistonState.SHOOT));
         
         JoystickButton armHome = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.A_BUTTON);
@@ -52,6 +60,8 @@ public class OI {
         
         JoystickButton armScale = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.Y_BUTTON);
         armScale.whenPressed(new ArmPosition(ArmControlMode.SENSORED,Arm.SCALE_ANGLE_SETPOINT));
+	
+	
 	}
 
 	public GamePad getDriverGamepad() {

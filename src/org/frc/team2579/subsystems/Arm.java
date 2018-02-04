@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +38,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	private WPI_VictorSPX armFollower2;
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 3.5/12;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 12/12;
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 140;
 	public static final double SWITCH_ANGLE_SETPOINT = 50;
@@ -54,7 +55,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		try {
 			clawPiston = new DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID,RobotMap.CLAW_OUT_PCM_ID);
 			shootPiston = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID,RobotMap.SHOOT_OUT_PCM_ID);
-			shiftPiston = new DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID,RobotMap.SHIFT_OUT_PCM_ID);
+			shiftPiston = new DoubleSolenoid(1,RobotMap.SHIFT_IN_PCM2_ID,RobotMap.SHIFT_OUT_PCM2_ID);
 			
 			armTalon = new WPI_TalonSRX(RobotMap.ARM_TALON1_CAN_ID);
 			armFollower1 = new WPI_VictorSPX(RobotMap.ARM_VICTOR1_CAN_ID);
@@ -84,8 +85,9 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	public void setArmPiston(ArmPistonState state){
 		if(state == ArmPistonState.SHOOT) {
-			clawPiston.set(Value.kReverse);
-			shootPiston.set(Value.kForward);
+			clawPiston.set(Value.kForward);
+			Timer.delay(.1);
+			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.RELOAD) {
 			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.GRAB){
@@ -130,7 +132,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 	
 	private void moveWithJoystick() {
-		setArmAngle(ArmControlMode.MANUAL,OI.getInstance().getOperatorGamepad().getRightYAxis() * 4096);
+		//setArmAngle(ArmControlMode.MANUAL,OI.getInstance().getOperatorGamepad().getRightYAxis() * 4096);
+		armTalon.set(OI.getInstance().getOperatorGamepad().getRightYAxis());
 	}
 	@Override
 	protected void initDefaultCommand() {

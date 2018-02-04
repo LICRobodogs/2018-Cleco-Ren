@@ -15,17 +15,17 @@ public class Intake extends Subsystem {
 	};
 
 	public static final double INTAKE_LOAD_SPEED = 0.65;
-	public static final double INTAKE_EJECT_SPEED = -0.35;
+	public static final double INTAKE_EJECT_SPEED = -0.55;
 
 	private static DoubleSolenoid intakePiston;
-	private static Solenoid innerWheelPiston;
+	private static DoubleSolenoid innerWheelPiston;
 	private Spark leftIntake, rightIntake;
 
 	public Intake() {
 		try {
 			leftIntake = new Spark(RobotMap.LEFT_INTAKE_PWM);
 			rightIntake = new Spark(RobotMap.RIGHT_INTAKE_PWM);
-			innerWheelPiston = new Solenoid(1,RobotMap.INTAKE_WHEEL_PCM2_ID);
+			innerWheelPiston = new DoubleSolenoid(1,RobotMap.INTAKE_WHEEL_IN_PCM2_ID,RobotMap.INTAKE_WHEEL_OUT_PCM2_ID);
 			intakePiston = new DoubleSolenoid(RobotMap.INTAKE_DOWN_PCM_ID,RobotMap.INTAKE_UP_PCM_ID);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Intake constructor");
@@ -57,9 +57,9 @@ public class Intake extends Subsystem {
 		} else if(state == IntakePistonState.UP) {
 			intakePiston.set(Value.kReverse);
 		} else if(state == IntakePistonState.IN){
-			innerWheelPiston.set(true);
+			innerWheelPiston.set(Value.kForward);
 		} else if(state == IntakePistonState.OUT){
-			innerWheelPiston.set(false);
+			innerWheelPiston.set(Value.kReverse);
 		}
 	}
 	
