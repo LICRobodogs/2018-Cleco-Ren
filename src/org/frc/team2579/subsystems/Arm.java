@@ -37,8 +37,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 	private WPI_VictorSPX armFollower1;
 	private WPI_VictorSPX armFollower2;
 	
-	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 12/12;
+	private static final double NATIVE_TO_ANGLE_FACTOR = 5450/150;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 3.5/12;
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 140;
 	public static final double SWITCH_ANGLE_SETPOINT = 50;
@@ -63,6 +63,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 			
 			armFollower1.follow(armTalon);
 			armFollower2.follow(armTalon);
+			armFollower2.setInverted(true);
 			
 			armTalon.setNeutralMode(NeutralMode.Brake);
 			armTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
@@ -85,9 +86,9 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	public void setArmPiston(ArmPistonState state){
 		if(state == ArmPistonState.SHOOT) {
-			clawPiston.set(Value.kForward);
+			clawPiston.set(Value.kReverse);
 			Timer.delay(.1);
-			shootPiston.set(Value.kReverse);
+			shootPiston.set(Value.kForward);
 		} else if(state == ArmPistonState.RELOAD) {
 			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.GRAB){
@@ -141,10 +142,11 @@ public class Arm extends Subsystem implements ControlLoopable {
 
 	}
 	public void updateStatus(Robot.OperationMode operationMode) {
-		SmartDashboard.putNumber("Shooter Speed: ", getArmAngle());
-		SmartDashboard.putNumber("flywheel_setpoint", getAngleSetpoint());
-		SmartDashboard.putNumber("isOnTarget result", Math.abs(getArmAngle() + Math.abs(getAngleSetpoint())));
-        SmartDashboard.putBoolean("flywheel_on_target", isOnTarget());
+		SmartDashboard.putNumber("Arm Angle: ", getArmAngle());
+		//SmartDashboard.putNumber("Arm Setpoint", getAngleSetpoint());
+		//SmartDashboard.putNumber("isOnTarget result", Math.abs(getArmAngle() + Math.abs(getAngleSetpoint())));
+        //SmartDashboard.putBoolean("onTarget", isOnTarget());
+        SmartDashboard.putNumber("Arm Motor Current", armTalon.getOutputCurrent());
 		if (operationMode == Robot.OperationMode.TEST) {
 		}
 	}
@@ -159,7 +161,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 
 	private double getArmAngle() {
-		return armTalon.getSelectedSensorPosition(0)*(1/4096);
+		//return ((double)armTalon.getSelectedSensorPosition(0))/NATIVE_TO_ANGLE_FACTOR;
+		return armTalon.getSensorCollection().getPulseWidthPosition()/NATIVE_TO_ANGLE_FACTOR-49.11;
 	}
 	
 	public void resetArmEncoder() {
@@ -168,6 +171,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	public void setControlMode(ArmControlMode mode){
 		this.controlMode = mode;
+		resetArmEncoder();
 	}
 	
 	public ArmControlMode getMode(){

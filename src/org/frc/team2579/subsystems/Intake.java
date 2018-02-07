@@ -1,7 +1,9 @@
 package org.frc.team2579.subsystems;
 
+import org.frc.team2579.OI;
 import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
+import org.frc.team2579.utility.ControlLoopable;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -9,7 +11,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Intake extends Subsystem {
+public class Intake extends Subsystem implements ControlLoopable {
 	public static enum IntakePistonState {
 		UP, DOWN, IN, OUT
 	};
@@ -68,5 +70,16 @@ public class Intake extends Subsystem {
 			setSpeed(-.7);
 		else 
 			setSpeed(0);
+	}
+
+	@Override
+	public void controlLoopUpdate() {
+		setSpeed(OI.getInstance().getDriverGamepad().getLeftTriggerAxis()-OI.getInstance().getDriverGamepad().getRightTriggerAxis());
+	}
+
+	@Override
+	public void setPeriodMs(long periodMs) {
+		// TODO Auto-generated method stub
+		
 	}
 }
