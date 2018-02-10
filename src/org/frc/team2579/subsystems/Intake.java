@@ -74,7 +74,7 @@ public class Intake extends Subsystem implements ControlLoopable {
 
 	@Override
 	public void controlLoopUpdate() {
-		setSpeed(OI.getInstance().getDriverGamepad().getLeftTriggerAxis()-OI.getInstance().getDriverGamepad().getRightTriggerAxis());
+		setSpeed(0.6*(OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis()));
 	}
 
 	@Override
