@@ -74,6 +74,8 @@ public class Intake extends Subsystem implements ControlLoopable {
 
 	@Override
 	public void controlLoopUpdate() {
+		if(Math.abs(OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis())>0&&innerWheelPiston.get()==Value.kReverse)
+			setIntakePiston(IntakePistonState.IN);
 		setSpeed(0.6*(OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis()));
 	}
 

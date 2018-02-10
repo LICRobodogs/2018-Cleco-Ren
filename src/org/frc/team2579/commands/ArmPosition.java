@@ -11,6 +11,7 @@ public class ArmPosition extends Command {
 
 	private ArmControlMode mode;
 	private double angle;
+	
 	public ArmPosition(ArmControlMode mode, double angle) {
 		requires(Robot.arm);
 		this.mode = mode;

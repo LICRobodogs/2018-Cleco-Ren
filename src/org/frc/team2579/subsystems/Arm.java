@@ -7,10 +7,12 @@ import org.frc.team2579.utility.ControlLoopable;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -50,12 +52,16 @@ public class Arm extends Subsystem implements ControlLoopable {
     public static int mArmIZone = (int) (1023.0 / mArmKp);
     public static double mArmRampRate = 0;
     public static int mArmAllowableError = 0;
+    
+    private DigitalInput homeLimit;
 	
 	public Arm() {
 		try {
 			clawPiston = new DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID,RobotMap.CLAW_OUT_PCM_ID);
 			shootPiston = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID,RobotMap.SHOOT_OUT_PCM_ID);
 			shiftPiston = new DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID,RobotMap.SHIFT_OUT_PCM_ID);
+			
+			homeLimit = new DigitalInput(RobotMap.ARM_HOME_LIMIT_PORT);
 			
 			armTalon = new WPI_TalonSRX(RobotMap.ARM_TALON1_CAN_ID);
 			armFollower1 = new WPI_VictorSPX(RobotMap.ARM_VICTOR1_CAN_ID);
@@ -153,8 +159,11 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 
 	public boolean isOnTarget() {
-		return (armTalon.getControlMode() == ControlMode.Position
-                && Math.abs(getArmAngle() + Math.abs(getAngleSetpoint())) < mArmOnTargetTolerance);
+		if(getAngleSetpoint()==0 && isHome())
+			return true;
+		else
+			return (armTalon.getControlMode() == ControlMode.Position
+                && Math.abs(getArmAngle() - Math.abs(getAngleSetpoint())) < mArmOnTargetTolerance);
 	}
 
 	private double getAngleSetpoint() {
@@ -177,6 +186,10 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	public ArmControlMode getMode(){
 		return controlMode;
+	}
+	
+	public boolean isHome() {
+		return homeLimit.get();
 	}
 
 	@Override
