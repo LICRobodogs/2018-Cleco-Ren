@@ -115,6 +115,10 @@ public class Robot extends IterativeRobot {
 	public void testPeriodic() {
 	}
 	
+	public void disabledInit() {
+		arm.resetArmEncoder();
+	}
+	
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 	}

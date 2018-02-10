@@ -55,7 +55,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		try {
 			clawPiston = new DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID,RobotMap.CLAW_OUT_PCM_ID);
 			shootPiston = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID,RobotMap.SHOOT_OUT_PCM_ID);
-			shiftPiston = new DoubleSolenoid(1,RobotMap.SHIFT_IN_PCM2_ID,RobotMap.SHIFT_OUT_PCM2_ID);
+			shiftPiston = new DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID,RobotMap.SHIFT_OUT_PCM_ID);
 			
 			armTalon = new WPI_TalonSRX(RobotMap.ARM_TALON1_CAN_ID);
 			armFollower1 = new WPI_VictorSPX(RobotMap.ARM_VICTOR1_CAN_ID);
@@ -134,7 +134,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	private void moveWithJoystick() {
 		//setArmAngle(ArmControlMode.MANUAL,OI.getInstance().getOperatorGamepad().getRightYAxis() * 4096);
-		armTalon.set(OI.getInstance().getOperatorGamepad().getRightYAxis());
+		if(!(getArmAngle() < 2 && OI.getInstance().getOperatorGamepad().getRightYAxis() > 0))
+			armTalon.set(OI.getInstance().getOperatorGamepad().getRightYAxis());
 	}
 	@Override
 	protected void initDefaultCommand() {
@@ -162,7 +163,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 
 	private double getArmAngle() {
 		//return ((double)armTalon.getSelectedSensorPosition(0))/NATIVE_TO_ANGLE_FACTOR;
-		return armTalon.getSensorCollection().getPulseWidthPosition()/NATIVE_TO_ANGLE_FACTOR-49.11;
+		return armTalon.getSensorCollection().getPulseWidthPosition()/NATIVE_TO_ANGLE_FACTOR-110;
 	}
 	
 	public void resetArmEncoder() {

@@ -37,7 +37,7 @@ public class RobotMap {
 	public static final int SHOOT_IN_PCM_ID = 6;
 	public static final int SHOOT_OUT_PCM_ID = 1;
 	
-	public static final int SHIFT_IN_PCM2_ID = 0;
-	public static final int SHIFT_OUT_PCM2_ID = 7;
+	public static final int SHIFT_IN_PCM_ID = 3;
+	public static final int SHIFT_OUT_PCM_ID = 4;
 
 }
