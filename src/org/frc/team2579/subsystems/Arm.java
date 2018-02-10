@@ -3,6 +3,7 @@ package org.frc.team2579.subsystems;
 import org.frc.team2579.OI;
 import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
+import org.frc.team2579.subsystems.Intake.IntakePistonState;
 import org.frc.team2579.utility.ControlLoopable;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -32,20 +33,21 @@ public class Arm extends Subsystem implements ControlLoopable {
 		MANUAL, SENSORED, HOLD, TEST
 	}
 	
-	private ArmControlMode controlMode = ArmControlMode.MANUAL;
+	private ArmControlMode controlMode = ArmControlMode.SENSORED;
 	
 	public static DoubleSolenoid clawPiston, shootPiston, shiftPiston;
 	private WPI_TalonSRX armTalon;
 	private WPI_VictorSPX armFollower1;
 	private WPI_VictorSPX armFollower2;
 	
-	private static final double NATIVE_TO_ANGLE_FACTOR = 5450/150;
+	private static final double NATIVE_TO_ANGLE_FACTOR = (80/12)*(60/14);
+	private static double offset;
 	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 3.5/12;
 	public double mAngle;
-	public static final double SCALE_ANGLE_SETPOINT = 140;
-	public static final double SWITCH_ANGLE_SETPOINT = 50;
+	public static final double SCALE_ANGLE_SETPOINT = 240;
+	public static final double SWITCH_ANGLE_SETPOINT = 100;
 	public static double mArmOnTargetTolerance = 5;
-	public static double mArmKp = 0.1;
+	public static double mArmKp = 1.375;
     public static double mArmKi = 0.001;
     public static double mArmKd = 0.0;
     public static double mArmKf = 1;
@@ -69,10 +71,13 @@ public class Arm extends Subsystem implements ControlLoopable {
 			
 			armFollower1.follow(armTalon);
 			armFollower2.follow(armTalon);
-			armFollower2.setInverted(true);
-			
+			//armFollower2.setInverted(true);
+			//test
+			armFollower1.setInverted(true);
+			armTalon.setInverted(true);
 			armTalon.setNeutralMode(NeutralMode.Brake);
-			armTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
+			armTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+			//armTalon.setSensorPhase(true);
 			armTalon.config_kP(0, mArmKp, 10);
 			armTalon.config_kI(0, mArmKi, 10);
 			armTalon.config_kD(0, mArmKd, 10);
@@ -85,6 +90,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 			armTalon.configPeakOutputReverse(-ARM_MOTOR_VOLTAGE_PERCENT_LIMIT, 10);
 			resetArmEncoder();
 			setArmGearbox(ArmGearboxState.ARM_DOG);
+			mAngle = 0;
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Arm constructor");
 		}
@@ -93,8 +99,10 @@ public class Arm extends Subsystem implements ControlLoopable {
 	public void setArmPiston(ArmPistonState state){
 		if(state == ArmPistonState.SHOOT) {
 			clawPiston.set(Value.kReverse);
-			Timer.delay(.1);
+			Timer.delay(.15);
 			shootPiston.set(Value.kForward);
+			Timer.delay(.5);
+			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.RELOAD) {
 			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.GRAB){
@@ -122,7 +130,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		} else if (controlMode == ArmControlMode.HOLD) {
 			armTalon.set(ControlMode.Position, armTalon.getSelectedSensorPosition(0));
 		} else if (controlMode == ArmControlMode.SENSORED) {
-			armTalon.set(ControlMode.Position,angle);
+			armTalon.set(ControlMode.Position,mAngle);
 		}
 	}
 	
@@ -133,6 +141,9 @@ public class Arm extends Subsystem implements ControlLoopable {
 			moveWithFeedBack();
 		}
 
+		if(homeLimit.get()) {
+			resetArmEncoder();
+		}
 	}
 	public void moveWithFeedBack() {
 		setArmAngle(ArmControlMode.SENSORED,mAngle);
@@ -140,7 +151,9 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	private void moveWithJoystick() {
 		//setArmAngle(ArmControlMode.MANUAL,OI.getInstance().getOperatorGamepad().getRightYAxis() * 4096);
-		if(!(getArmAngle() < 2 && OI.getInstance().getOperatorGamepad().getRightYAxis() > 0))
+		if(!(getArmAngle() < 2 && OI.getInstance().getOperatorGamepad().getRightYAxis() > 0.2))
+			//if(Intake.isIntakeIn())
+				//Intake.setIntakePiston(IntakePistonState.OUT);
 			armTalon.set(OI.getInstance().getOperatorGamepad().getRightYAxis());
 	}
 	@Override
@@ -150,11 +163,12 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 	public void updateStatus(Robot.OperationMode operationMode) {
 		SmartDashboard.putNumber("Arm Angle: ", getArmAngle());
-		//SmartDashboard.putNumber("Arm Setpoint", getAngleSetpoint());
-		//SmartDashboard.putNumber("isOnTarget result", Math.abs(getArmAngle() + Math.abs(getAngleSetpoint())));
-        //SmartDashboard.putBoolean("onTarget", isOnTarget());
+		SmartDashboard.putNumber("Arm Setpoint", getAngleSetpoint());
+		SmartDashboard.putNumber("isOnTarget result", Math.abs(getArmAngle() - Math.abs(getAngleSetpoint())));
+        SmartDashboard.putBoolean("onTarget", isOnTarget());
         SmartDashboard.putNumber("Arm Motor Current", armTalon.getOutputCurrent());
-		if (operationMode == Robot.OperationMode.TEST) {
+		SmartDashboard.putNumber("PWM:", armTalon.getMotorOutputVoltage());
+        if (operationMode == Robot.OperationMode.TEST) {
 		}
 	}
 
@@ -163,7 +177,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 			return true;
 		else
 			return (armTalon.getControlMode() == ControlMode.Position
-                && Math.abs(getArmAngle() - Math.abs(getAngleSetpoint())) < mArmOnTargetTolerance);
+                && Math.abs(getAngleSetpoint() - Math.abs(getArmAngle())) < mArmOnTargetTolerance);
 	}
 
 	private double getAngleSetpoint() {
@@ -172,10 +186,11 @@ public class Arm extends Subsystem implements ControlLoopable {
 
 	private double getArmAngle() {
 		//return ((double)armTalon.getSelectedSensorPosition(0))/NATIVE_TO_ANGLE_FACTOR;
-		return armTalon.getSensorCollection().getPulseWidthPosition()/NATIVE_TO_ANGLE_FACTOR-110;
+		return armTalon.getSensorCollection().getPulseWidthPosition()/NATIVE_TO_ANGLE_FACTOR-offset;
 	}
 	
 	public void resetArmEncoder() {
+		offset=armTalon.getSensorCollection().getPulseWidthPosition()/NATIVE_TO_ANGLE_FACTOR;
 		armTalon.setSelectedSensorPosition(0, 0, 10);
 	}
 	

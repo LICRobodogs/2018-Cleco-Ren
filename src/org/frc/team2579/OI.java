@@ -39,10 +39,10 @@ public class OI {
         //intakeIn.whileHeld(new IntakeSpeed(m_driverGamepad.getJoyStick().getRawAxis(GamePad.RIGHT_TRIGGER_AXIS)));
         //intakeIn.whenReleased(new IntakeSpeedOff());
         
-        JoystickButton intakeUp = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.BACK_BUTTON);
+        JoystickButton intakeUp = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
         intakeUp.whileActive(new IntakeUp());
         
-        JoystickButton intakeDown = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.START_BUTTON);
+        JoystickButton intakeDown = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
         intakeDown.whileActive(new IntakeDown());
         
         JoystickButton intakeInnerIn = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.A_BUTTON);
@@ -66,6 +66,14 @@ public class OI {
         JoystickButton armScale = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.Y_BUTTON);
         armScale.whenPressed(new ArmPosition(ArmControlMode.SENSORED,Arm.SCALE_ANGLE_SETPOINT));
 	
+        JoystickButton clawGrab = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.X_BUTTON);
+        clawGrab.whenPressed(new ArmPistonPosition(ArmPistonState.GRAB));
+        
+        JoystickButton intakeIn = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.START_BUTTON);
+        intakeIn.whileActive(new IntakeInnerWheelPosition(IntakePistonState.IN));
+        
+        JoystickButton intakeOut = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.BACK_BUTTON);
+        intakeOut.whileActive(new IntakeInnerWheelPosition(IntakePistonState.OUT));
         
         //Pneumatics Diagonostics
         

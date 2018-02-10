@@ -3,6 +3,7 @@ package org.frc.team2579.commands;
 import org.frc.team2579.Robot;
 import org.frc.team2579.subsystems.Arm.ArmControlMode;
 import org.frc.team2579.subsystems.Arm.ArmPistonState;
+import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.Intake.IntakePistonState;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -21,7 +22,7 @@ public class ArmPosition extends Command {
 	@Override
 	protected void initialize() {
 		Robot.arm.setArmPiston(ArmPistonState.GRAB);
-		Robot.intake.setIntakePiston(IntakePistonState.OUT);
+		Intake.setIntakePiston(IntakePistonState.OUT);
 	}
 	
 	@Override
@@ -36,7 +37,7 @@ public class ArmPosition extends Command {
 	
 	@Override
 	protected void end() {
-		Robot.arm.setArmAngle(ArmControlMode.HOLD, angle);
+		//Robot.arm.setArmAngle(ArmControlMode.HOLD, angle);
 	}
 
 }

@@ -53,7 +53,11 @@ public class Intake extends Subsystem implements ControlLoopable {
 		return intakePiston.get() == Value.kReverse;
 	}
 
-	public void setIntakePiston(IntakePistonState state) {
+	public static boolean isIntakeIn(){
+		return innerWheelPiston.get()==Value.kForward;
+	}
+	
+	public static void setIntakePiston(IntakePistonState state) {
 		if(state == IntakePistonState.DOWN) {
 			intakePiston.set(Value.kForward);
 		} else if(state == IntakePistonState.UP) {
@@ -74,8 +78,8 @@ public class Intake extends Subsystem implements ControlLoopable {
 
 	@Override
 	public void controlLoopUpdate() {
-		if(Math.abs(OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis())>0&&innerWheelPiston.get()==Value.kReverse)
-			setIntakePiston(IntakePistonState.IN);
+		//if(Math.abs(OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis())>0&&innerWheelPiston.get()==Value.kReverse)
+			//setIntakePiston(IntakePistonState.IN);
 		setSpeed(0.6*(OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis()));
 	}
 
