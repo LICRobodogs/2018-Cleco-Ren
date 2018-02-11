@@ -4,10 +4,10 @@ import edu.wpi.first.wpilibj.buttons.Button;
 
 public class GamePadTriggerButton extends Button {
 
-	public static final int RIGHT_TRIGGER = 0;
-	public static final int LEFT_TRIGGER = 1;
-	public static final int RIGHT_AXIS_UP_TRIGGER = 2;
-	public static final int RIGHT_AXIS_DOWN_TRIGGER = 3;
+	public static final int RIGHT_TRIGGER = 3;
+	public static final int LEFT_TRIGGER = 2;
+	//public static final int RIGHT_AXIS_UP_TRIGGER = 2;
+	//public static final int RIGHT_AXIS_DOWN_TRIGGER = 3;
 	public static final int RIGHT_AXIS_RIGHT_TRIGGER = 4;
 	public static final int RIGHT_AXIS_LEFT_TRIGGER = 5;
 	public static final int LEFT_AXIS_UP_TRIGGER = 6;
@@ -30,12 +30,12 @@ public class GamePadTriggerButton extends Button {
 		else if (m_trigger == LEFT_TRIGGER) {
 			return m_controller.getLeftTrigger();
 		}
-		else if (m_trigger == RIGHT_AXIS_UP_TRIGGER) {
+		/*else if (m_trigger == RIGHT_AXIS_UP_TRIGGER) {
 			return m_controller.getRightAxisUpTrigger();
 		}
 		else if (m_trigger == RIGHT_AXIS_DOWN_TRIGGER) {
 			return m_controller.getRightAxisDownTrigger();
-		}
+		}*/
 		else if (m_trigger == RIGHT_AXIS_RIGHT_TRIGGER) {
 			return m_controller.getRightAxisRightTrigger();
 		}

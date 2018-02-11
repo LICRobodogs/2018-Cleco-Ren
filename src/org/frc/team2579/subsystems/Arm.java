@@ -44,13 +44,13 @@ public class Arm extends Subsystem implements ControlLoopable {
 	private static double offset;
 	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 3.5/12;
 	public double mAngle;
-	public static final double SCALE_ANGLE_SETPOINT = 240;
-	public static final double SWITCH_ANGLE_SETPOINT = 100;
-	public static double mArmOnTargetTolerance = 10;
-	public static double mArmKp = 1.375;
-    public static double mArmKi = 0.001;
-    public static double mArmKd = 0.0;
-    public static double mArmKf = 1;
+	public static final double SCALE_ANGLE_SETPOINT = 220;
+	public static final double SWITCH_ANGLE_SETPOINT = 80;
+	public static double mArmOnTargetTolerance = 5;
+	public static double mArmKp = 0.45;
+    public static double mArmKi = 0.0;
+    public static double mArmKd = 0.25;
+    public static double mArmKf = 0;
     public static int mArmIZone = (int) (1023.0 / mArmKp);
     public static double mArmRampRate = 0;
     public static int mArmAllowableError = 0;
@@ -72,12 +72,14 @@ public class Arm extends Subsystem implements ControlLoopable {
 			armFollower1.follow(armTalon);
 			armFollower2.follow(armTalon);
 			//armFollower2.setInverted(true);
+			
 			//test
 			armFollower1.setInverted(true);
 			armTalon.setInverted(true);
+			
 			armTalon.setNeutralMode(NeutralMode.Brake);
 			armTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-			//armTalon.setSensorPhase(true);
+			armTalon.setSensorPhase(true);
 			armTalon.config_kP(0, mArmKp, 10);
 			armTalon.config_kI(0, mArmKi, 10);
 			armTalon.config_kD(0, mArmKd, 10);
@@ -90,7 +92,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 			armTalon.configPeakOutputReverse(-ARM_MOTOR_VOLTAGE_PERCENT_LIMIT, 10);
 			resetArmEncoder();
 			setArmGearbox(ArmGearboxState.ARM_DOG);
-			mAngle = 0;
+			//mAngle = 0;
+			armTalon.set(ControlMode.Position, 0);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Arm constructor");
 		}
@@ -101,7 +104,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 			clawPiston.set(Value.kReverse);
 			Timer.delay(.15);
 			shootPiston.set(Value.kForward);
-			Timer.delay(.5);
+			Timer.delay(.75);
 			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.RELOAD) {
 			shootPiston.set(Value.kReverse);
@@ -120,33 +123,43 @@ public class Arm extends Subsystem implements ControlLoopable {
 		}
 	}
 	
+	public void setArmAngle() {
+		if(!(controlMode==ArmControlMode.MANUAL))
+			armTalon.set(ControlMode.Position,(mAngle!=0?mAngle:0));
+	}
+	
 	public void setArmAngle(ArmControlMode controlMode, double angle) {
 		this.controlMode = controlMode;
-		this.mAngle = angle;
+		//this.mAngle = angle-offset;
 		if (controlMode == ArmControlMode.MANUAL) {
-			armTalon.set(ControlMode.Position, angle);
+			armTalon.set(ControlMode.PercentOutput, angle);
+			setSetpoint(0);
 		} else if (controlMode == ArmControlMode.TEST) {
 
 		} else if (controlMode == ArmControlMode.HOLD) {
 			armTalon.set(ControlMode.Position, armTalon.getSelectedSensorPosition(0));
 		} else if (controlMode == ArmControlMode.SENSORED) {
-			armTalon.set(ControlMode.Position,(mAngle-offset)*NATIVE_TO_ANGLE_FACTOR);
+			armTalon.set(ControlMode.Position,(mAngle!=0?mAngle:0));
 		}
 	}
 	
 	public void controlLoopUpdate() {
-		if (controlMode == ArmControlMode.MANUAL) {
+		/*if (controlMode == ArmControlMode.MANUAL) {
 			moveWithJoystick();
 		} else if (controlMode == ArmControlMode.SENSORED) {
-			moveWithFeedBack();
+			//moveWithFeedBack();
 		}
-
+		 */
 		if(homeLimit.get()) {
 			resetArmEncoder();
 		}
 	}
 	public void moveWithFeedBack() {
-		setArmAngle(ArmControlMode.SENSORED,(mAngle-offset)*NATIVE_TO_ANGLE_FACTOR);
+		setArmAngle(ArmControlMode.SENSORED,(mAngle));
+	}
+	
+	public void setSetpoint(double angle) {
+		mAngle = (angle)*NATIVE_TO_ANGLE_FACTOR;
 	}
 	
 	private void moveWithJoystick() {
@@ -169,12 +182,15 @@ public class Arm extends Subsystem implements ControlLoopable {
         SmartDashboard.putNumber("Arm Motor Current", armTalon.getOutputCurrent());
 		SmartDashboard.putNumber("PWM:", armTalon.getMotorOutputVoltage());
 		SmartDashboard.putBoolean("isHome", isHome());
+		SmartDashboard.putString("TALON MODE: ", armTalon.getControlMode().toString());
+		SmartDashboard.putString("ARM CONTROL MODE: ", controlMode.toString());
+		SmartDashboard.putNumber("mAngle: ", mAngle);
         if (operationMode == Robot.OperationMode.TEST) {
 		}
 	}
 
 	public boolean isOnTarget() {
-		if(getAngleSetpoint()==0 && isHome())
+		if((getAngleSetpoint()==0 && isHome())||(armTalon.getControlMode()==ControlMode.PercentOutput&&controlMode==ArmControlMode.MANUAL))
 			return true;
 		else
 			return (armTalon.getControlMode() == ControlMode.Position
@@ -182,7 +198,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 
 	private double getAngleSetpoint() {
-		return armTalon.getClosedLoopTarget(0);
+		return armTalon.getClosedLoopTarget(0)/NATIVE_TO_ANGLE_FACTOR;
 	}
 
 	private double getArmAngle() {
@@ -192,7 +208,9 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	public void resetArmEncoder() {
 		offset=armTalon.getSensorCollection().getPulseWidthPosition()/NATIVE_TO_ANGLE_FACTOR;
+		//mAngle=0;
 		armTalon.setSelectedSensorPosition(0, 0, 10);
+		//setSetpoint(0);
 	}
 	
 	public void setControlMode(ArmControlMode mode){

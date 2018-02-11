@@ -6,8 +6,10 @@ import org.frc.team2579.commands.ArmPosition;
 import org.frc.team2579.commands.IntakeDown;
 import org.frc.team2579.commands.IntakeInnerWheelPosition;
 import org.frc.team2579.commands.IntakePosition;
+import org.frc.team2579.commands.IntakeRotate;
 import org.frc.team2579.commands.IntakeSpeed;
 import org.frc.team2579.commands.IntakeSpeedOff;
+import org.frc.team2579.commands.IntakeUnstuck;
 import org.frc.team2579.commands.IntakeUp;
 import org.frc.team2579.controller.GamePad;
 import org.frc.team2579.controller.GamePadTriggerButton;
@@ -32,13 +34,19 @@ public class OI {
 		m_driverGamepad = new GamePad(RobotMap.DRIVER_GAMEPAD_USB_ID);
 		m_operatorGamepad = new GamePad(RobotMap.OPERATOR_GAMEPAD_USB_ID);
 		
-		GamePadTriggerButton intakeOut = new GamePadTriggerButton(m_driverGamepad, GamePad.LEFT_TRIGGER_AXIS);
-        intakeOut.whileHeld(new IntakeSpeed(0.4*m_driverGamepad.getJoyStick().getRawAxis(GamePad.LEFT_TRIGGER_AXIS)));
+		GamePadTriggerButton intakeOut = new GamePadTriggerButton(m_operatorGamepad, GamePad.LEFT_TRIGGER_AXIS);
+        intakeOut.whileHeld(new IntakeSpeed());
         intakeOut.whenReleased(new IntakeSpeedOff());
         
-        GamePadTriggerButton intakeIn = new GamePadTriggerButton(m_driverGamepad, GamePad.RIGHT_TRIGGER_AXIS);
-        intakeIn.whileHeld(new IntakeSpeed(0.6*m_driverGamepad.getJoyStick().getRawAxis(GamePad.RIGHT_TRIGGER_AXIS)));
+        GamePadTriggerButton intakeIn = new GamePadTriggerButton(m_operatorGamepad, GamePad.RIGHT_TRIGGER_AXIS);
+        intakeIn.whileHeld(new IntakeSpeed());
         intakeIn.whenReleased(new IntakeSpeedOff());
+        
+        JoystickButton intakeUnstuck = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.X_BUTTON);
+        intakeUnstuck.whenPressed(new IntakeUnstuck(true));
+        
+        JoystickButton intakeRotate = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.B_BUTTON);
+        intakeRotate.whenPressed(new IntakeRotate(true));
         
         JoystickButton intakeUp = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
         intakeUp.whileActive(new IntakeUp());
@@ -58,19 +66,22 @@ public class OI {
         JoystickButton armShoot = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
         armShoot.whileActive(new ArmPistonPosition(ArmPistonState.SHOOT));
         
-        JoystickButton armHome = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.A_BUTTON);
-        armHome.whenPressed(new ArmPosition(ArmControlMode.SENSORED,0));
+        //JoystickButton armHome = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.A_BUTTON);
+        //armHome.whileHeld(new ArmPosition(ArmControlMode.SENSORED,10));
+        //armHome.whenReleased(new ArmPosition(ArmControlMode.MANUAL,0));
         
         JoystickButton armSwitch = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.B_BUTTON);
         armSwitch.whenPressed(new ArmPosition(ArmControlMode.SENSORED,Arm.SWITCH_ANGLE_SETPOINT));
+        armSwitch.whenReleased(new ArmPosition(ArmControlMode.MANUAL,0));
         
         JoystickButton armScale = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.Y_BUTTON);
         armScale.whenPressed(new ArmPosition(ArmControlMode.SENSORED,Arm.SCALE_ANGLE_SETPOINT));
+        armScale.whenReleased(new ArmPosition(ArmControlMode.MANUAL,0));
 	
-        GamePadTriggerButton clawRelease = new GamePadTriggerButton(m_operatorGamepad,GamePad.LEFT_TRIGGER_AXIS);
+        GamePadTriggerButton clawRelease = new GamePadTriggerButton(m_driverGamepad,GamePad.LEFT_TRIGGER_AXIS);
         clawRelease.whenPressed(new ArmPistonPosition(ArmPistonState.RELEASE));
         
-        GamePadTriggerButton clawGrab = new GamePadTriggerButton(m_operatorGamepad,GamePad.RIGHT_TRIGGER_AXIS);
+        GamePadTriggerButton clawGrab = new GamePadTriggerButton(m_driverGamepad,GamePad.RIGHT_TRIGGER_AXIS);
         clawGrab.whenPressed(new ArmPistonPosition(ArmPistonState.GRAB));
         
         JoystickButton intakeArmIn = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.START_BUTTON);

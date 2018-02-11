@@ -15,7 +15,9 @@ public class Intake extends Subsystem implements ControlLoopable {
 	public static enum IntakePistonState {
 		UP, DOWN, IN, OUT
 	};
-
+	
+	private boolean unstuck, rotate;
+	
 	public static final double INTAKE_LOAD_SPEED = 0.65;
 	public static final double INTAKE_EJECT_SPEED = -0.55;
 
@@ -34,6 +36,27 @@ public class Intake extends Subsystem implements ControlLoopable {
 		}
 	}
 
+	public void setStuck(boolean u) {
+		this.unstuck = u;
+	}
+	
+	public void setRotate(boolean r) {
+		this.rotate = r;
+	}
+	
+	public void setSpeed() {
+		if (unstuck&&!rotate) {
+			leftIntake.set(0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
+			rightIntake.set(0.4*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
+		}else if(rotate&&!unstuck) {
+			leftIntake.set(-0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
+			rightIntake.set(0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
+		}else if(!unstuck&&!rotate){
+			leftIntake.set(-0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
+			rightIntake.set(-0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
+		}
+		}
+	
 	public void setSpeed(double speed) {
 		leftIntake.set(-speed);
 		rightIntake.set(-speed);
@@ -70,10 +93,10 @@ public class Intake extends Subsystem implements ControlLoopable {
 	}
 	
 	public void shootPowercube(){
-		if(isIntakeUp())
-			setSpeed(-.7);
-		else 
-			setSpeed(0);
+		//if(isIntakeUp())
+			//setSpeed(-.7);
+		//else 
+			//setSpeed(0);
 	}
 
 	@Override

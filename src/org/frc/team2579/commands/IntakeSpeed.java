@@ -11,21 +11,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSpeed extends Command {
 
-	public double speed;
+	public double mSpeed;
+	public boolean mUnstuck, mRotate;
+	
+	public IntakeSpeed(){
+		requires(Robot.intake);
+	}
 	
 	public IntakeSpeed(double speed){
 		requires(Robot.intake);
-		this.speed = speed;
+		this.mSpeed = speed;
+		mUnstuck = false;
+		mRotate = false;
+	}
+	
+	public IntakeSpeed(boolean kill) {
+		mUnstuck = !kill;
+		mRotate = !kill;
 	}
 	
 	@Override
 	protected void initialize() {
+		if(!mUnstuck&&!mRotate) {
+			Robot.intake.setStuck(mUnstuck);
+			Robot.intake.setRotate(mRotate);
+		}
 		Robot.arm.setArmPiston(ArmPistonState.RELEASE);
 		Intake.setIntakePiston(IntakePistonState.IN);
 	}
 	protected void execute() {
-		Robot.intake.setSpeed(speed);
-		SmartDashboard.putNumber("Intake Speed: ",speed);
+			Robot.intake.setSpeed();
+		//SmartDashboard.putNumber("Intake Speed: ",speed);
 	}
 	
 	@Override

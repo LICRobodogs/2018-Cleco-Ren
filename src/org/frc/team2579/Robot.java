@@ -95,7 +95,7 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopInit() {
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
-		Robot.arm.setControlMode(ArmControlMode.MANUAL);
+		Robot.arm.setControlMode(ArmControlMode.SENSORED);
 		driveTrain.setPeriodMs(10);
 		controlLoop.start();
 	}
@@ -120,6 +120,7 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void disabledPeriodic() {
+		//updateStatus();
 		Scheduler.getInstance().run();
 	}
 	

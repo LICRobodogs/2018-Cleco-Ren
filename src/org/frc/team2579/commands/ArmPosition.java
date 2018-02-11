@@ -6,28 +6,36 @@ import org.frc.team2579.subsystems.Arm.ArmPistonState;
 import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.Intake.IntakePistonState;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ArmPosition extends Command {
 
-	private ArmControlMode mode;
-	private double angle;
+	private ArmControlMode mMode;
+	private double mAngle;
 	
 	public ArmPosition(ArmControlMode mode, double angle) {
 		requires(Robot.arm);
-		this.mode = mode;
-		this.angle = angle;
+		this.mMode = mode;
+		this.mAngle = angle;
 	}
 
 	@Override
 	protected void initialize() {
+		Robot.arm.setSetpoint(mAngle);
 		Robot.arm.setArmPiston(ArmPistonState.GRAB);
 		Intake.setIntakePiston(IntakePistonState.OUT);
 	}
 	
 	@Override
 	protected void execute() {
-		Robot.arm.setArmAngle(mode, angle);
+		/*if(mMode!=ArmControlMode.MANUAL) {
+			//Robot.arm.setControlMode(ArmControlMode.SENSORED);
+			Robot.arm.setArmAngle();
+		}else {
+		*/	//Robot.arm.setControlMode(ArmControlMode.MANUAL);
+			Robot.arm.setArmAngle(mMode, mAngle);
+		//}
 	}
 	
 	@Override
@@ -38,7 +46,10 @@ public class ArmPosition extends Command {
 	@Override
 	protected void end() {
 		Robot.arm.setArmPiston(ArmPistonState.SHOOT);
-		//Robot.arm.setArmAngle(ArmControlMode.HOLD, angle);
+		Robot.arm.setArmPiston(ArmPistonState.GRAB);
+		//Timer.delay(1.5);
+		//Robot.arm.setSetpoint(25);
+		//Robot.arm.setArmAngle(mMode, 30);
 	}
 
 }
