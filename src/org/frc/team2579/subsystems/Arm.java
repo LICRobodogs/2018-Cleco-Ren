@@ -46,7 +46,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 240;
 	public static final double SWITCH_ANGLE_SETPOINT = 100;
-	public static double mArmOnTargetTolerance = 5;
+	public static double mArmOnTargetTolerance = 10;
 	public static double mArmKp = 1.375;
     public static double mArmKi = 0.001;
     public static double mArmKd = 0.0;
@@ -130,7 +130,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		} else if (controlMode == ArmControlMode.HOLD) {
 			armTalon.set(ControlMode.Position, armTalon.getSelectedSensorPosition(0));
 		} else if (controlMode == ArmControlMode.SENSORED) {
-			armTalon.set(ControlMode.Position,mAngle);
+			armTalon.set(ControlMode.Position,(mAngle-offset)*NATIVE_TO_ANGLE_FACTOR);
 		}
 	}
 	
@@ -146,7 +146,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		}
 	}
 	public void moveWithFeedBack() {
-		setArmAngle(ArmControlMode.SENSORED,mAngle);
+		setArmAngle(ArmControlMode.SENSORED,(mAngle-offset)*NATIVE_TO_ANGLE_FACTOR);
 	}
 	
 	private void moveWithJoystick() {
@@ -168,6 +168,7 @@ public class Arm extends Subsystem implements ControlLoopable {
         SmartDashboard.putBoolean("onTarget", isOnTarget());
         SmartDashboard.putNumber("Arm Motor Current", armTalon.getOutputCurrent());
 		SmartDashboard.putNumber("PWM:", armTalon.getMotorOutputVoltage());
+		SmartDashboard.putBoolean("isHome", isHome());
         if (operationMode == Robot.OperationMode.TEST) {
 		}
 	}

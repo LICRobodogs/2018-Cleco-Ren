@@ -37,6 +37,7 @@ public class ArmPosition extends Command {
 	
 	@Override
 	protected void end() {
+		Robot.arm.setArmPiston(ArmPistonState.SHOOT);
 		//Robot.arm.setArmAngle(ArmControlMode.HOLD, angle);
 	}
 
