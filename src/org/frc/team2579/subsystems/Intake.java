@@ -44,17 +44,29 @@ public class Intake extends Subsystem implements ControlLoopable {
 		this.rotate = r;
 	}
 	
+	public double getRightTriggerAxis() {
+		return OI.getInstance().getOperatorGamepad().getRightTriggerAxis()>0.3?OI.getInstance().getOperatorGamepad().getRightTriggerAxis():0;
+	}
+	
+	public double getLeftTriggerAxis() {
+		return OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()>0.4?OI.getInstance().getOperatorGamepad().getLeftTriggerAxis():0;
+	}
+	
 	public void setSpeed() {
-		if (unstuck&&!rotate) {
-			leftIntake.set(0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
-			rightIntake.set(0.4*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
-		}else if(rotate&&!unstuck) {
+		if (getRightTriggerAxis()-getLeftTriggerAxis()<0/*unstuck&&!rotate*/) {
+			leftIntake.set(-0.7*(getRightTriggerAxis()-getLeftTriggerAxis()));
+			rightIntake.set(-0.7*(getRightTriggerAxis()-getLeftTriggerAxis()));
+		}else{
+			leftIntake.set(-0.7*(getRightTriggerAxis()-getLeftTriggerAxis()));
+			rightIntake.set(-0.7*(getRightTriggerAxis()-getLeftTriggerAxis()));
+		}
+			/*else if(rotate&&!unstuck) {
 			leftIntake.set(-0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
 			rightIntake.set(0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
 		}else if(!unstuck&&!rotate){
 			leftIntake.set(-0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
 			rightIntake.set(-0.6*(OI.getInstance().getOperatorGamepad().getRightTriggerAxis()-OI.getInstance().getOperatorGamepad().getLeftTriggerAxis()));
-		}
+		}*/
 		}
 	
 	public void setSpeed(double speed) {
@@ -110,5 +122,19 @@ public class Intake extends Subsystem implements ControlLoopable {
 	public void setPeriodMs(long periodMs) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setSpeed(double mSpeed, double mSpeed2) {
+		leftIntake.set(-mSpeed);
+		rightIntake.set(-mSpeed2);
+		
+	}
+	
+	public void setLeftSpeed(double speed) {
+		leftIntake.set(speed);
+	}
+	
+	public void setRightSpeed(double speed) {
+		rightIntake.set(-speed);
 	}
 }

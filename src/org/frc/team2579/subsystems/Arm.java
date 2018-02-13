@@ -42,15 +42,15 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	private static final double NATIVE_TO_ANGLE_FACTOR = (80/12)*(60/14);
 	private static double offset;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 3.5/12;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4/12;
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 220;
 	public static final double SWITCH_ANGLE_SETPOINT = 80;
 	public static double mArmOnTargetTolerance = 5;
-	public static double mArmKp = 0.45;
+	public static double mArmKp = 0.45;//.45
     public static double mArmKi = 0.0;
-    public static double mArmKd = 0.25;
-    public static double mArmKf = 0;
+    public static double mArmKd = 0.25;//.25
+    public static double mArmKf = 0.0;
     public static int mArmIZone = (int) (1023.0 / mArmKp);
     public static double mArmRampRate = 0;
     public static int mArmAllowableError = 0;
@@ -144,9 +144,9 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 	
 	public void controlLoopUpdate() {
-		/*if (controlMode == ArmControlMode.MANUAL) {
+		if (controlMode == ArmControlMode.MANUAL) {
 			moveWithJoystick();
-		} else if (controlMode == ArmControlMode.SENSORED) {
+		}/*else if (controlMode == ArmControlMode.SENSORED) {
 			//moveWithFeedBack();
 		}
 		 */
@@ -164,10 +164,11 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	private void moveWithJoystick() {
 		//setArmAngle(ArmControlMode.MANUAL,OI.getInstance().getOperatorGamepad().getRightYAxis() * 4096);
-		if(!(getArmAngle() < 2 && OI.getInstance().getOperatorGamepad().getRightYAxis() > 0.2))
+		//if(!(getArmAngle() < 2 && OI.getInstance().getOperatorGamepad().getRightYAxis() < 0.2)) {
 			//if(Intake.isIntakeIn())
 				//Intake.setIntakePiston(IntakePistonState.OUT);
-			armTalon.set(OI.getInstance().getOperatorGamepad().getRightYAxis());
+			armTalon.set(-OI.getInstance().getOperatorGamepad().getRightYAxis());
+		//}
 	}
 	@Override
 	protected void initDefaultCommand() {

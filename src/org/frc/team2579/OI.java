@@ -6,6 +6,7 @@ import org.frc.team2579.commands.ArmPosition;
 import org.frc.team2579.commands.IntakeDown;
 import org.frc.team2579.commands.IntakeInnerWheelPosition;
 import org.frc.team2579.commands.IntakePosition;
+import org.frc.team2579.commands.IntakeQuickInOut;
 import org.frc.team2579.commands.IntakeRotate;
 import org.frc.team2579.commands.IntakeSpeed;
 import org.frc.team2579.commands.IntakeSpeedOff;
@@ -42,8 +43,8 @@ public class OI {
         intakeIn.whileHeld(new IntakeSpeed());
         intakeIn.whenReleased(new IntakeSpeedOff());
         
-        JoystickButton intakeUnstuck = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.X_BUTTON);
-        intakeUnstuck.whenPressed(new IntakeUnstuck(true));
+        //JoystickButton intakeUnstuck = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.X_BUTTON);
+        //intakeUnstuck.whenPressed(new IntakeUnstuck(true));
         
         JoystickButton intakeRotate = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.B_BUTTON);
         intakeRotate.whenPressed(new IntakeRotate(true));
@@ -72,7 +73,10 @@ public class OI {
         
         JoystickButton armSwitch = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.B_BUTTON);
         armSwitch.whenPressed(new ArmPosition(ArmControlMode.SENSORED,Arm.SWITCH_ANGLE_SETPOINT));
-        armSwitch.whenReleased(new ArmPosition(ArmControlMode.MANUAL,0));
+        //armSwitch.whenReleased(new ArmPosition(ArmControlMode.MANUAL,0));
+        
+        JoystickButton intakeUnstuck = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.X_BUTTON);
+        intakeUnstuck.whenPressed(new IntakeQuickInOut());
         
         JoystickButton armScale = new JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.Y_BUTTON);
         armScale.whenPressed(new ArmPosition(ArmControlMode.SENSORED,Arm.SCALE_ANGLE_SETPOINT));
