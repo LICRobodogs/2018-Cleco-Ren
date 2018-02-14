@@ -42,8 +42,8 @@ public class IntakeSpeed extends Command {
 			Robot.intake.setStuck(mUnstuck);
 			Robot.intake.setRotate(mRotate);
 		}
-		Robot.arm.setArmPiston(ArmPistonState.RELEASE);
-		Intake.setIntakePiston(IntakePistonState.IN);
+		//Robot.arm.setArmPiston(ArmPistonState.RELEASE);
+		//Intake.setIntakePiston(IntakePistonState.IN);
 	}
 	protected void execute() {
 		if(mSpeed!=0 && mSpeed2!=0) {

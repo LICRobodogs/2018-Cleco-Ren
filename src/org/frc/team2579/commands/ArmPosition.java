@@ -1,6 +1,7 @@
 package org.frc.team2579.commands;
 
 import org.frc.team2579.Robot;
+import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.Arm.ArmControlMode;
 import org.frc.team2579.subsystems.Arm.ArmPistonState;
 import org.frc.team2579.subsystems.Intake;
@@ -45,8 +46,9 @@ public class ArmPosition extends Command {
 	
 	@Override
 	protected void end() {
-		Robot.arm.setArmPiston(ArmPistonState.SHOOT);
-		Robot.arm.setArmPiston(ArmPistonState.GRAB);
+		//Robot.arm.setArmPiston(ArmPistonState.SHOOT);
+		//Robot.arm.setArmPiston(ArmPistonState.GRAB);
+		Robot.arm.setArmAngle(ArmControlMode.SENSORED, Arm.SWITCH_ANGLE_SETPOINT);
 		//Timer.delay(1.5);
 		//Robot.arm.setSetpoint(25);
 		//Robot.arm.setArmAngle(mMode, 30);

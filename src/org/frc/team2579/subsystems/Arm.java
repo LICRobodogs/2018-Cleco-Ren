@@ -42,12 +42,12 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	private static final double NATIVE_TO_ANGLE_FACTOR = (80/12)*(60/14);
 	private static double offset;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4/12;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.5/12;
 	public double mAngle;
-	public static final double SCALE_ANGLE_SETPOINT = 220;
-	public static final double SWITCH_ANGLE_SETPOINT = 80;
+	public static final double SCALE_ANGLE_SETPOINT = 230;
+	public static final double SWITCH_ANGLE_SETPOINT = 50;
 	public static double mArmOnTargetTolerance = 5;
-	public static double mArmKp = 0.45;//.45
+	public static double mArmKp = 1;//.45
     public static double mArmKi = 0.0;
     public static double mArmKd = 0.25;//.25
     public static double mArmKf = 0.0;
@@ -144,11 +144,11 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 	
 	public void controlLoopUpdate() {
-		if (controlMode == ArmControlMode.MANUAL) {
-			moveWithJoystick();
-		}/*else if (controlMode == ArmControlMode.SENSORED) {
+		//if (controlMode == ArmControlMode.MANUAL) {
+			//moveWithJoystick();
+		/*}else if (controlMode == ArmControlMode.SENSORED) {
 			//moveWithFeedBack();
-		}
+		//}
 		 */
 		if(homeLimit.get()) {
 			resetArmEncoder();
