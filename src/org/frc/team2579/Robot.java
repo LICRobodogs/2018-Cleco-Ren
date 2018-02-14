@@ -95,7 +95,7 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopInit() {
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
-		Robot.arm.setControlMode(ArmControlMode.SENSORED);
+		Robot.arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
 		controlLoop.start();
 	}

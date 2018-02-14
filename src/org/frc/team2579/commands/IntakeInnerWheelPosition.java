@@ -1,6 +1,7 @@
 package org.frc.team2579.commands;
 
 import org.frc.team2579.Robot;
+import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.Intake.IntakePistonState;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -14,7 +15,7 @@ private IntakePistonState state;
 	}
 	
 	public void initialize(){
-		Robot.intake.setIntakePiston(state);
+		Intake.setIntakePiston(state);
 	}
 	@Override
 	protected boolean isFinished() {
