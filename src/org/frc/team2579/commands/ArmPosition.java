@@ -24,8 +24,8 @@ public class ArmPosition extends Command {
 	@Override
 	protected void initialize() {
 		Robot.arm.setSetpoint(mAngle);
-		Robot.arm.setArmPiston(ArmPistonState.GRAB);
-		Intake.setIntakePiston(IntakePistonState.OUT);
+		//Robot.arm.setArmPiston(ArmPistonState.GRAB);
+		//Intake.setIntakePiston(IntakePistonState.OUT);
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class ArmPosition extends Command {
 	protected void end() {
 		//Robot.arm.setArmPiston(ArmPistonState.SHOOT);
 		//Robot.arm.setArmPiston(ArmPistonState.GRAB);
-		Robot.arm.setArmAngle(ArmControlMode.SENSORED, Arm.SWITCH_ANGLE_SETPOINT);
+		//Robot.arm.setArmAngle(ArmControlMode.SENSORED, Arm.SWITCH_ANGLE_SETPOINT);
 		//Timer.delay(1.5);
 		//Robot.arm.setSetpoint(25);
 		//Robot.arm.setArmAngle(mMode, 30);

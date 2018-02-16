@@ -102,10 +102,6 @@ public class Arm extends Subsystem implements ControlLoopable {
 	public void setArmPiston(ArmPistonState state){
 		if(state == ArmPistonState.SHOOT) {
 			clawPiston.set(Value.kReverse);
-			Timer.delay(.15);
-			shootPiston.set(Value.kForward);
-			Timer.delay(.75);
-			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.RELOAD) {
 			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.GRAB){
@@ -167,7 +163,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		//if(!(getArmAngle() < 2 && OI.getInstance().getOperatorGamepad().getRightYAxis() < 0.2)) {
 			//if(Intake.isIntakeIn())
 				//Intake.setIntakePiston(IntakePistonState.OUT);
-			armTalon.set(-OI.getInstance().getOperatorGamepad().getRightYAxis());
+			//armTalon.set(-OI.getInstance().getOperatorGamepad().getRightYAxis());
 		//}
 	}
 	@Override

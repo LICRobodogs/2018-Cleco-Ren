@@ -1,6 +1,7 @@
 package org.frc.team2579.controller;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
 
 //TODO Code support for Start/Back/XBox(?) buttons.
 /**
@@ -151,6 +152,38 @@ public class GamePad {
 		return stick.getPOV();
 	}
 
+	public boolean getRawDPadUp() {
+		return getDpadAngle() == 0;
+	}
+	
+	public DPadButton getDPadUp() {
+		return new DPadButton(this, DPadButton.Direction.UP);
+	}
+	
+	public boolean getRawDPadDown() {
+		return getDpadAngle() == 180;
+	}
+	
+	public DPadButton getDPadDown() {
+		return new DPadButton(this, DPadButton.Direction.DOWN);
+	}
+	
+	public boolean getRawDPadLeft() {
+		return getDpadAngle() == 270;
+	}
+	
+	public DPadButton getDPadLeft() {
+		return new DPadButton(this, DPadButton.Direction.LEFT);
+	}
+	
+	public boolean getRawDPadRight() {
+		return getDpadAngle() == 90;
+	}
+	
+	public DPadButton getDPadRight() {
+		return new DPadButton(this, DPadButton.Direction.RIGHT);
+	}
+	
 	/*
 	 * public boolean getDPadLeft(){ return
 	 * (stick.getRawAxis(LEFT_RIGHT_DPAD_AXIS) < LEFT_DPAD_TOLERANCE); }
@@ -203,5 +236,35 @@ public class GamePad {
 
 	public boolean getLeftAxisRightTrigger() {
 		return (getLeftXAxis() > LEFT_AXIS_RIGHT_TOLERANCE);
+	}
+	
+	public static class DPadButton extends Button {
+		public static enum Direction {
+			UP, DOWN, LEFT, RIGHT
+		}
+
+		private GamePad gamepad;
+		private Direction direction;
+
+		public DPadButton(GamePad gamepad, Direction direction) {
+			this.gamepad = gamepad;
+			this.direction = direction;
+		}
+
+		@Override
+		public boolean get() {
+			switch (direction) {
+				case UP:
+					return gamepad.getRawDPadUp();
+				case DOWN:
+					return gamepad.getRawDPadDown();
+				case LEFT:
+					return gamepad.getRawDPadLeft();
+				case RIGHT:
+					return gamepad.getRawDPadRight();
+				default: // Never reached
+					return false;
+			}
+		}
 	}
 }

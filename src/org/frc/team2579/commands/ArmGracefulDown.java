@@ -18,13 +18,14 @@ public class ArmGracefulDown extends Command {
 	
 	@Override
 	protected void initialize() {
-		Robot.arm.setArmPiston(ArmPistonState.SHOOT);
-		Robot.arm.setArmPiston(ArmPistonState.GRAB);
+		//Robot.arm.setArmPiston(ArmPistonState.SHOOT);
+		//Robot.arm.setArmPiston(ArmPistonState.GRAB);
 	}
 	
 	@Override
 	protected void execute() {
-		Robot.arm.setArmAngle(ArmControlMode.SENSORED, Arm.SWITCH_ANGLE_SETPOINT);
+		Robot.arm.setArmAngle(ArmControlMode.MANUAL, 0);
+		//Robot.arm.setArmAngle(ArmControlMode.SENSORED, Arm.SWITCH_ANGLE_SETPOINT);
 	}
 	
 	@Override
@@ -34,7 +35,7 @@ public class ArmGracefulDown extends Command {
 	
 	@Override
 	protected void end() {
-		Robot.arm.setArmAngle(ArmControlMode.MANUAL, 0);
+		//Robot.arm.setArmAngle(ArmControlMode.MANUAL, 0);
 	}
 
 }
