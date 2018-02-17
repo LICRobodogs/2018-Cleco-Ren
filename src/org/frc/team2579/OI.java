@@ -5,6 +5,7 @@ import org.frc.team2579.commands.ArmGracefulDown;
 import org.frc.team2579.commands.ArmPistonPosition;
 import org.frc.team2579.commands.ArmPosition;
 import org.frc.team2579.commands.ArmScaleScore;
+import org.frc.team2579.commands.ArmSwitchScore;
 import org.frc.team2579.commands.IntakeDown;
 import org.frc.team2579.commands.IntakeInnerWheelPosition;
 import org.frc.team2579.commands.IntakePosition;
@@ -54,7 +55,7 @@ public class OI {
         */
         
         JoystickButton armSwitch = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.B_BUTTON);
-        armSwitch.whenPressed(new ArmScaleScore());
+        armSwitch.whenPressed(new ArmSwitchScore());
 
         JoystickButton armScale = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.Y_BUTTON);
         armScale.whenPressed(new ArmScaleScore());

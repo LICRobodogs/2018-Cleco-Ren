@@ -45,8 +45,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.5/12;
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 230;
-	public static final double SWITCH_ANGLE_SETPOINT = 50;
-	public static double mArmOnTargetTolerance = 5;
+	public static final double SWITCH_ANGLE_SETPOINT = 80;
+	public static double mArmOnTargetTolerance = 10;
 	public static double mArmKp = 1;//.45
     public static double mArmKi = 0.0;
     public static double mArmKd = 0.25;//.25
@@ -101,7 +101,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	public void setArmPiston(ArmPistonState state){
 		if(state == ArmPistonState.SHOOT) {
-			clawPiston.set(Value.kReverse);
+			shootPiston.set(Value.kForward);
 		} else if(state == ArmPistonState.RELOAD) {
 			shootPiston.set(Value.kReverse);
 		} else if(state == ArmPistonState.GRAB){
