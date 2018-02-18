@@ -118,9 +118,9 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 		m_moveInput = OI.getInstance().getDriverGamepad().getLeftYAxis();
 		//m_steerInput = OI.getInstance().getDriverGamepad().getRightXAxis();
-		if(m_moveInput<-0.1) {
+		if(m_moveInput<0) {
 			m_steerInput = OI.getInstance().getDriverGamepad().getLeftXAxis();
-		}else if(m_moveInput>0.1) {
+		}else if(m_moveInput>0) {
 			m_steerInput = -OI.getInstance().getDriverGamepad().getLeftXAxis();
 		}else {
 			m_steerInput = OI.getInstance().getDriverGamepad().getLeftXAxis();

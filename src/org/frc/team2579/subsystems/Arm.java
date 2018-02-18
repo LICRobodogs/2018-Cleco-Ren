@@ -47,7 +47,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	public static final double SCALE_ANGLE_SETPOINT = 230;
 	public static final double SWITCH_ANGLE_SETPOINT = 80;
 	public static double mArmOnTargetTolerance = 10;
-	public static double mArmKp = 1;//.45
+	public static double mArmKp = 3;//.45
     public static double mArmKi = 0.0;
     public static double mArmKd = 0.25;//.25
     public static double mArmKf = 0.0;
@@ -109,6 +109,10 @@ public class Arm extends Subsystem implements ControlLoopable {
 		} else if(state == ArmPistonState.RELEASE){
 			clawPiston.set(Value.kReverse);
 		}
+	}
+	
+	public boolean isShot() {
+		return shootPiston.get()==Value.kForward;
 	}
 	
 	public void setArmGearbox(ArmGearboxState state){
@@ -179,6 +183,7 @@ public class Arm extends Subsystem implements ControlLoopable {
         SmartDashboard.putNumber("Arm Motor Current", armTalon.getOutputCurrent());
 		SmartDashboard.putNumber("PWM:", armTalon.getMotorOutputVoltage());
 		SmartDashboard.putBoolean("isHome", isHome());
+		SmartDashboard.putBoolean("isShot", isShot());
 		SmartDashboard.putString("TALON MODE: ", armTalon.getControlMode().toString());
 		SmartDashboard.putString("ARM CONTROL MODE: ", controlMode.toString());
 		SmartDashboard.putNumber("mAngle: ", mAngle);

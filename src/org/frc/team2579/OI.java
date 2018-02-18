@@ -2,6 +2,7 @@ package org.frc.team2579;
 
 import org.frc.team2579.commands.ArmGearboxPistonPosition;
 import org.frc.team2579.commands.ArmGracefulDown;
+import org.frc.team2579.commands.ArmHome;
 import org.frc.team2579.commands.ArmPistonPosition;
 import org.frc.team2579.commands.ArmPosition;
 import org.frc.team2579.commands.ArmScaleScore;
@@ -48,11 +49,8 @@ public class OI {
         JoystickButton armShoot = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
         armShoot.whileActive(new ArmPistonPosition(ArmPistonState.SHOOT));
         
-        /*
         JoystickButton armHome = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.A_BUTTON);
-        armHome.whileHeld(new ArmPosition(ArmControlMode.SENSORED,10));
-        armHome.whenReleased(new ArmPosition(ArmControlMode.MANUAL,0));
-        */
+        armHome.whenPressed(new ArmHome());
         
         JoystickButton armSwitch = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.B_BUTTON);
         armSwitch.whenPressed(new ArmSwitchScore());
