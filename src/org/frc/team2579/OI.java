@@ -44,10 +44,10 @@ public class OI {
 		 
 		//DRIVER CONTROLS
         JoystickButton armReload = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
-        armReload.whileActive(new ArmPistonPosition(ArmPistonState.RELOAD));
+        armReload.whenPressed(new ArmPistonPosition(ArmPistonState.RELOAD));
         
         JoystickButton armShoot = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
-        armShoot.whileActive(new ArmPistonPosition(ArmPistonState.SHOOT));
+        armShoot.whenPressed(new ArmPistonPosition(ArmPistonState.SHOOT));
         
         JoystickButton armHome = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.A_BUTTON);
         armHome.whenPressed(new ArmHome());
