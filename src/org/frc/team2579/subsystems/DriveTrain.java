@@ -117,13 +117,13 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			return;
 
 		//m_moveInput = OI.getInstance().getDriverGamepad().getLeftYAxis();
-		m_moveInput = OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis();
-		//m_steerInput = OI.getInstance().getDriverGamepad().getRightXAxis();
-		if(m_moveInput<0) {
+		m_moveInput = -(OI.getInstance().getDriverGamepad().getRightTriggerAxis()-OI.getInstance().getDriverGamepad().getLeftTriggerAxis());
+		m_steerInput = OI.getInstance().getDriverGamepad().getLeftXAxis();
+		/*if(m_moveInput<0) {
 			m_steerInput = OI.getInstance().getDriverGamepad().getLeftXAxis();
 		}else if(m_moveInput>0) {
 			m_steerInput = -OI.getInstance().getDriverGamepad().getLeftXAxis();
-		}/*else {
+		}else {
 			m_steerInput = OI.getInstance().getDriverGamepad().getLeftXAxis();
 		}*/
 /*		m_moveOutput = joystickSensitivityAdjust(m_moveInput, DRIVER_JOY1_C1,
