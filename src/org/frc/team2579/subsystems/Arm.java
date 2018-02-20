@@ -42,7 +42,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	private static final double NATIVE_TO_ANGLE_FACTOR = (80/12)*(60/14);
 	private static double offset;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 5.0/12.0;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.8/12.0;
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 230;
 	public static final double SWITCH_ANGLE_SETPOINT = 80;
@@ -115,6 +115,10 @@ public class Arm extends Subsystem implements ControlLoopable {
 		return shootPiston.get()==Value.kForward;
 	}
 	
+	public boolean isClimbEngaged() {
+		return shiftPiston.get()==Value.kReverse;
+	}
+	
 	public void setArmGearbox(ArmGearboxState state){
 		if(state == ArmGearboxState.ARM_DOG){
 			shiftPiston.set(Value.kForward);
@@ -144,12 +148,14 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 	
 	public void controlLoopUpdate() {
-		//if (controlMode == ArmControlMode.MANUAL) {
-			//moveWithJoystick();
+		if (isClimbEngaged()) //{
+			moveWithJoystick();
 		/*}else if (controlMode == ArmControlMode.SENSORED) {
 			//moveWithFeedBack();
 		//}
 		 */
+		
+		
 		if(homeLimit.get()) {
 			resetArmEncoder();
 		}
@@ -167,7 +173,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		//if(!(getArmAngle() < 2 && OI.getInstance().getOperatorGamepad().getRightYAxis() < 0.2)) {
 			//if(Intake.isIntakeIn())
 				//Intake.setIntakePiston(IntakePistonState.OUT);
-			//armTalon.set(-OI.getInstance().getOperatorGamepad().getRightYAxis());
+			armTalon.set(ControlMode.PercentOutput,-OI.getInstance().getDriverGamepad().getRightYAxis());
 		//}
 	}
 	@Override
@@ -184,6 +190,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		SmartDashboard.putNumber("PWM:", armTalon.getMotorOutputVoltage());
 		SmartDashboard.putBoolean("isHome", isHome());
 		SmartDashboard.putBoolean("isShot", isShot());
+		SmartDashboard.putBoolean("isClimbEngaged", isClimbEngaged());
 		SmartDashboard.putString("TALON MODE: ", armTalon.getControlMode().toString());
 		SmartDashboard.putString("ARM CONTROL MODE: ", controlMode.toString());
 		SmartDashboard.putNumber("mAngle: ", mAngle);

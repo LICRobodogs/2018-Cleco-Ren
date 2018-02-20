@@ -57,6 +57,12 @@ public class OI {
 
         JoystickButton armScale = new JoystickButton(m_driverGamepad.getJoyStick(),GamePad.Y_BUTTON);
         armScale.whenPressed(new ArmScaleScore());
+        
+        DPadButton armGearboxDogArm = new DPadButton(m_driverGamepad, DPadButton.Direction.RIGHT);
+        armGearboxDogArm.whenPressed(new ArmGearboxPistonPosition(ArmGearboxState.ARM_DOG));
+        
+        DPadButton armGearboxDogClimb = new DPadButton(m_driverGamepad, DPadButton.Direction.LEFT);
+        armGearboxDogClimb.whenPressed(new ArmGearboxPistonPosition(ArmGearboxState.CLIMB_DOG));
 	
         
         //OPERATOR CONTROLS
