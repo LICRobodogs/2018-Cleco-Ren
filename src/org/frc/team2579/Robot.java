@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final Intake intake = new Intake();
-	public static final Arm arm = new Arm();
+	//public static final Arm arm = new Arm();
 /*	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;
@@ -49,7 +49,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		controlLoop.addLoopable(driveTrain);
-		controlLoop.addLoopable(arm);
+		//controlLoop.addLoopable(arm);
 		controlLoop.addLoopable(intake);
 /*		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
@@ -95,7 +95,7 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopInit() {
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
-		Robot.arm.setControlMode(ArmControlMode.MANUAL);
+		//Robot.arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
 		controlLoop.start();
 	}
@@ -116,7 +116,7 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void disabledInit() {
-		arm.resetArmEncoder();
+		//arm.resetArmEncoder();
 	}
 	
 	public void disabledPeriodic() {
@@ -125,6 +125,6 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void updateStatus() {
-		arm.updateStatus(operationMode);
+		//arm.updateStatus(operationMode);
 	}
 }
