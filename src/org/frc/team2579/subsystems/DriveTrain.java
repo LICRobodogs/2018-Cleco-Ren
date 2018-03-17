@@ -6,6 +6,7 @@ import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -54,10 +55,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 */
 	private WPI_TalonSRX leftDrive1;
-	private WPI_VictorSPX leftDrive2;
+	private WPI_TalonSRX leftDrive2;
 
 	private WPI_TalonSRX rightDrive1;
-	private WPI_VictorSPX rightDrive2;
+	private WPI_TalonSRX rightDrive2;
 
 	private DifferentialDrive m_drive;
 
@@ -68,25 +69,26 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public DriveTrain() {
 		try {
 			leftDrive1 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID);
-			leftDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
+			//leftDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
+			leftDrive2 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
 			//leftDrive1.setPID(LEFT_P, LEFT_I, LEFT_D);
 
 			rightDrive1 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_RIGHT_MOTOR1_CAN_ID);
-			rightDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
+			//rightDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
+			rightDrive2 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
 			//rightDrive1.setPID(RIGHT_P, RIGHT_I, RIGHT_D);
 
 			leftDrive2.follow(leftDrive1);
-
 			rightDrive2.follow(rightDrive1);
-
 			leftDrive1.setNeutralMode(NeutralMode.Brake);
-
 			rightDrive1.setNeutralMode(NeutralMode.Brake);
+			leftDrive2.setNeutralMode(NeutralMode.Brake);
+			rightDrive2.setNeutralMode(NeutralMode.Brake);
+			leftDrive1.configOpenloopRamp(2, 0);
+			leftDrive1.configOpenloopRamp(2, 0);
 			
-/*			leftDrive1
-					.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
-			rightDrive1
-					.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);*/
+			leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,10);
+			rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,10);
 
 			m_drive = new DifferentialDrive(leftDrive1, rightDrive1);
 			

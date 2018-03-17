@@ -28,7 +28,7 @@ public class Robot extends IterativeRobot {
 	
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final Intake intake = new Intake();
-	//public static final Arm arm = new Arm();
+	public static final Arm arm = new Arm();
 /*	private static final String kDefaultAuto = "Default";
 	private static final String kCustomAuto = "My Auto";
 	private String m_autoSelected;

@@ -52,13 +52,13 @@ public class Arm extends Subsystem implements ControlLoopable {
     public static double mArmKd = 0.25;//.25
     public static double mArmKf = 0.0;
     public static int mArmIZone = (int) (1023.0 / mArmKp);
-    public static double mArmRampRate = 0;
+    public static double mArmRampRate = .5;
     public static int mArmAllowableError = 0;
     
     private DigitalInput homeLimit;
 	
 	public Arm() {
-		try {
+		try {/*
 			clawPiston = new DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID,RobotMap.CLAW_OUT_PCM_ID);
 			shootPiston = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID,RobotMap.SHOOT_OUT_PCM_ID);
 			shiftPiston = new DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID,RobotMap.SHIFT_OUT_PCM_ID);
@@ -94,6 +94,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 			setArmGearbox(ArmGearboxState.ARM_DOG);
 			//mAngle = 0;
 			armTalon.set(ControlMode.Position, 0);
+			*/
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Arm constructor");
 		}

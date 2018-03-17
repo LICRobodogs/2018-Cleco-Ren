@@ -29,8 +29,8 @@ public class Intake extends Subsystem implements ControlLoopable {
 		try {
 			leftIntake = new Spark(RobotMap.LEFT_INTAKE_PWM);
 			rightIntake = new Spark(RobotMap.RIGHT_INTAKE_PWM);
-			innerWheelPiston = new DoubleSolenoid(RobotMap.INTAKE_WHEEL_IN_PCM2_ID,RobotMap.INTAKE_WHEEL_OUT_PCM2_ID);
-			intakePiston = new DoubleSolenoid(RobotMap.INTAKE_DOWN_PCM_ID,RobotMap.INTAKE_UP_PCM_ID);
+			//innerWheelPiston = new DoubleSolenoid(RobotMap.INTAKE_WHEEL_IN_PCM2_ID,RobotMap.INTAKE_WHEEL_OUT_PCM2_ID);
+			//intakePiston = new DoubleSolenoid(RobotMap.INTAKE_DOWN_PCM_ID,RobotMap.INTAKE_UP_PCM_ID);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Intake constructor");
 		}

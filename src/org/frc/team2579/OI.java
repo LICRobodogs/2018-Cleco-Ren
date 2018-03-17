@@ -23,8 +23,6 @@ import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.Intake.IntakePistonState;
 
-import com.sun.javafx.scene.traversal.Direction;
-
 import edu.wpi.first.wpilibj.buttons.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
