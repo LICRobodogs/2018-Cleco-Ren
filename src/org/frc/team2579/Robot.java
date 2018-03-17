@@ -7,6 +7,7 @@
 
 package org.frc.team2579;
 
+import org.frc.team2579.commands.auton.CenterSwitchAuton;
 import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.DriveTrain;
 import org.frc.team2579.subsystems.Intake;
@@ -15,7 +16,11 @@ import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,10 +34,9 @@ public class Robot extends IterativeRobot {
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final Intake intake = new Intake();
 	public static final Arm arm = new Arm();
-/*	private static final String kDefaultAuto = "Default";
-	private static final String kCustomAuto = "My Auto";
-	private String m_autoSelected;
-	private SendableChooser<String> m_chooser = new SendableChooser<>();*/
+	
+	Command autonomousCommand;
+	public static SendableChooser<Command> autonChooser;
 	
 	public static final ControlLooper controlLoop = new ControlLooper("Main control loop", 10);
 	public static OI oi;
@@ -54,6 +58,7 @@ public class Robot extends IterativeRobot {
 /*		m_chooser.addDefault("Default Auto", kDefaultAuto);
 		m_chooser.addObject("My Auto", kCustomAuto);
 		SmartDashboard.putData("Auto choices", m_chooser);*/
+		setupAutonChooser();
 	}
 
 	/**
@@ -69,10 +74,17 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		/*m_autoSelected = m_chooser.getSelected();
-		// autoSelected = SmartDashboard.getString("Auto Selector",
-		// defaultAuto);
-		System.out.println("Auto selected: " + m_autoSelected);*/
+		DriveTrain.resetMP();
+		DriveTrain.resetPosition();
+	
+		Robot.driveTrain.setControlMode(DriveTrainControlMode.AUTON,0);
+		driveTrain.setPeriodMs(20);
+	    controlLoop.start();
+	    
+	    autonomousCommand = autonChooser.getSelected();
+        if (autonomousCommand != null) {
+            autonomousCommand.start();
+        }
 	}
 
 	/**
@@ -80,16 +92,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		/*switch (m_autoSelected) {
-			case kCustomAuto:
-				// Put custom auto code here
-				break;
-			case kDefaultAuto:
-			default:
-				// Put default auto code here
-				break;
-		}
-		*/
+		Scheduler.getInstance().run();
+		updateStatus();
 	}
 
 	
@@ -121,10 +125,20 @@ public class Robot extends IterativeRobot {
 	
 	public void disabledPeriodic() {
 		//updateStatus();
+		DriveTrain.resetMP();
+		DriveTrain.resetPosition();
 		Scheduler.getInstance().run();
 	}
 	
 	public void updateStatus() {
 		//arm.updateStatus(operationMode);
+		driveTrain.updateStatus(operationMode);
+	}
+	
+	public void setupAutonChooser(){
+		autonChooser = new SendableChooser<Command>();
+		autonChooser.addDefault("Switch Left", new CenterSwitchAuton());
+		autonChooser.addObject("Do Nothing", new CommandGroup());
+		SmartDashboard.putData("Auton Setting", autonChooser);
 	}
 }

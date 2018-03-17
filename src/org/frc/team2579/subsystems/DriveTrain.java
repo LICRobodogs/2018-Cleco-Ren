@@ -5,16 +5,21 @@ import org.frc.team2579.OI;
 import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 
+import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motion.SetValueMotionProfile;
+import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
 import org.frc.team2579.utility.ControlLoopable;
+import org.frc.team2579.utility.instrumentation;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static enum DriveTrainControlMode {
@@ -30,9 +35,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	private double m_moveInput = 0.0;
 	private double m_steerInput = 0.0;
 
-	private double m_moveOutput = 0.0;
-	private double m_steerOutput = 0.0;
-
 	// NavX
 
 	//private AHRS mxp = new AHRS(SPI.Port.kMXP);
@@ -40,31 +42,34 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	// Set control mode
 	private DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
 
+	static SetValueMotionProfile setValue;
+	
 	// Robot Intrinsics
 	public static double m_periodMs;
 
+	public static final double ENCODER_TICKS_TO_INCHES = 4096 * Math.PI * 4.0;
+	
+	public static final double LEFT_P = 0.0;
+	public static final double LEFT_I = 0.0;
+	public static final double LEFT_D = 0.0;
+	public static final double LEFT_F = 0.0;
 
-/*	private final PIDOutput headingControlPIDOut = new PIDOutput() {
-		public void pidWrite(double d) {
-		}
-	};
-
-	PIDController headingControlPID = new PIDController(HEADING_CONTROL_P,
-			HEADING_CONTROL_I, HEADING_CONTROL_D, mxp, headingControlPIDOut,
-			HEADING_CONTROL_PERIOD);
-
-*/
-	private WPI_TalonSRX leftDrive1;
+	public static final double RIGHT_P = 0.0;
+	public static final double RIGHT_I = 0.0;
+	public static final double RIGHT_D = 0.0;
+	public static final double RIGHT_F = 0.0;
+	
+	private static WPI_TalonSRX leftDrive1;//Vel:5636u/100ms
 	private WPI_TalonSRX leftDrive2;
 
-	private WPI_TalonSRX rightDrive1;
+	private static WPI_TalonSRX rightDrive1;//Vel:5802u/100ms
 	private WPI_TalonSRX rightDrive2;
 
+	private static MotionProfileStatus statusLeft, statusRight;
+	
 	private DifferentialDrive m_drive;
-
-	//private List<double[]> autonDesiresList = new ArrayList<double[]>();
-
-	//private double[] vTime = new double[5];
+	
+	private static boolean isRunning;
 
 	public DriveTrain() {
 		try {
@@ -84,8 +89,18 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			rightDrive1.setNeutralMode(NeutralMode.Brake);
 			leftDrive2.setNeutralMode(NeutralMode.Brake);
 			rightDrive2.setNeutralMode(NeutralMode.Brake);
-			leftDrive1.configOpenloopRamp(2, 0);
-			leftDrive1.configOpenloopRamp(2, 0);
+			leftDrive1.configOpenloopRamp(0.2, 0);
+			rightDrive1.configOpenloopRamp(0.2, 0);
+			leftDrive1.configPeakOutputForward(1,10);
+			leftDrive2.configPeakOutputForward(1,10);
+			rightDrive1.configPeakOutputForward(1,10);
+			rightDrive2.configPeakOutputForward(1,10);
+			leftDrive1.configPeakOutputReverse(-1,10);
+			leftDrive2.configPeakOutputReverse(-1,10);
+			rightDrive1.configPeakOutputReverse(-1,10);
+			rightDrive2.configPeakOutputReverse(-1,10);
+			
+			leftDrive1.setSensorPhase(false);
 			
 			leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,10);
 			rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,0,10);
@@ -93,12 +108,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			m_drive = new DifferentialDrive(leftDrive1, rightDrive1);
 			
 			m_drive.setSafetyEnabled(false);
-
-			/*headingControlPID.setInputRange(-180.0f, 180.0f);
-			headingControlPID.setOutputRange(-180.0f, 180.0f);
-			headingControlPID.setAbsoluteTolerance(HEADING_CONTROL_MAX_ERROR);
-			headingControlPID.setContinuous();*/
-
+			
+			statusLeft = new MotionProfileStatus();
+	        statusRight = new MotionProfileStatus();
+	        
 		} catch (Exception e) {
 			System.err
 					.println("An error occurred in the DriveTrain constructor");
@@ -157,138 +170,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		// This needs to be here for reasons.
 	}
 
-/*	private double joystickSensitivityAdjust(double rawInput, double C1,
-			double C2, double C3) {
-		// Accepts raw joystick input, outputs adjusted values based on
-		// nonlinear, 2nd order polynomial mapping.
-
-		double adjustedOutput = 0.0;
-
-		if (rawInput < 0) {
-			adjustedOutput = -(C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3);
-		} else if (rawInput > 0) {
-			adjustedOutput = (C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3);
-		}
-
-		return adjustedOutput;
-
-	}*/
-
-/*	public void addMoveDistance(double distanceDesire) {
-		// accepts distance (inches), adds move distance command to auton
-		// routine
-		// note that distance gets transformed to ticks
-		double distanceDesireTicks = distanceDesire * ENCODER_TICKS_TO_INCHES;
-		double[] waypoint = new double[] { distanceDesireTicks, 0 };
-		autonDesiresList.add(waypoint);
-	}
-
-	public void addTurnAngle(double angleDesire) {
-		// accepts absolute heading angle (degrees), adds turn command to auton
-		// routine
-		// note that angle gets transformed to radians
-		double angleDesireRad = angleDesire * Math.PI / 180;
-		double[] waypoint = new double[] { 0, angleDesireRad };
-		autonDesiresList.add(waypoint);
-	}
-
-	public void executeMovement() {
-		double[] waypoint = autonDesiresList.get(0);
-		if (waypoint[0] == 0.0) {
-			// turn desired
-		} else if (waypoint[1] == 0.0) {
-			// straight desired
-		} else {
-			System.out.println("Auton routine waypoints exhausted.");
-		}
-	}
-
-	private void generateProfile(CANTalon drive, double setPoint) {
-		CANTalon.TrajectoryPoint point = new CANTalon.TrajectoryPoint();
-		drive.clearMotionProfileTrajectories();
-		double t, m;
-		if (drive.getEncVelocity() < (.9*MAX_AUTON_VELOCITY)) {
-			if (setPoint <= MAX_ACCEL_DIST) {
-				t = 0;
-				m = (0 - drive.getSpeed()) / m_periodMs;
-				if(Math.abs(m)>MAX_AUTON_ACCEL)
-					m = -MAX_AUTON_ACCEL;
-				for (int i = 0; i < vTime.length; i++) {
-					t += 10;
-					vTime[i] = m * (t) + drive.getSpeed();
-					point.position = (drive.getSpeed() * t)
-							+ (.5 * m * (t * t));
-					point.velocity = (vTime[i]);
-					point.timeDurMs = 10;
-					point.profileSlotSelect = 0;
-
-					point.zeroPos = false;
-					if (i == 0)
-						point.zeroPos = true;
-
-					point.isLastPoint = false;
-					if ((i + 1) == vTime.length)
-						point.isLastPoint = true;
-
-					drive.pushMotionProfileTrajectory(point);
-				}
-			} else if (setPoint >= MAX_ACCEL_DIST) {
-				t = 0;
-				m = (MAX_AUTON_VELOCITY - drive.getSpeed()) / m_periodMs;
-				if(Math.abs(m)>MAX_AUTON_ACCEL)
-					m = MAX_AUTON_ACCEL;
-				for (int i = 0; i < vTime.length; i++) {
-					t += 10;
-					vTime[i] = m * (t) + drive.getSpeed();
-					point.position = (drive.getSpeed() * t)
-							+ (.5 * m * (t * t));
-					point.velocity = (vTime[i]);
-					point.timeDurMs = 10;
-					point.profileSlotSelect = 0;
-
-					point.zeroPos = false;
-					if (i == 0)
-						point.zeroPos = true;
-
-					point.isLastPoint = false;
-					if ((i + 1) == vTime.length)
-						point.isLastPoint = true;
-
-					drive.pushMotionProfileTrajectory(point);
-				}
-			}
-		}
-	}
-
-	private void generateDistancePath(double targetDistance) {
-
-	}
-
-	private void generateTurnPath(double targetAngle) {
-		double leftVel = leftDrive1.getEncVelocity();
-		double rightVel = rightDrive1.getEncVelocity();
-		double leftPos = leftDrive1.getEncPosition();
-		double rightPos = rightDrive1.getEncPosition();
-		double mxpYaw = mxp.getYaw() * Math.PI / 180;
-
-		double deltaLeftRight = (targetAngle - mxpYaw) * WHEEL_TO_WHEEL_DIST
-				* ENCODER_TICKS_TO_INCHES; // positive is left wheel moving
-											// more, in ticks
-
-		if (Math.abs(deltaLeftRight) < 100) {
-			// REMOVE POINT
-		} else {
-			getNextPoint();
-		}
-		if (Math.abs(deltaLeftRight) > MAX_ACCEL_DIST) {
-
-		}
-	}*/
-
-	private void getNextPoint() {
-
-	}
-
 	@Override
 	public void controlLoopUpdate() {
 		if (controlMode == DriveTrainControlMode.JOYSTICK) {
@@ -307,16 +188,140 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 	public void updateStatus(Robot.OperationMode operationMode) {
 		if (operationMode == Robot.OperationMode.COMPETITION) {
-			/*SmartDashboard.putNumber("Current Robot Angle: ", mxp.getYaw());
 			SmartDashboard.putNumber("Current Left Robot Drive Position: ",
-					leftDrive1.getPosition());
+					leftDrive1.getSelectedSensorPosition(0));
 			SmartDashboard.putNumber("Current Right Robot Drive Position: ",
-					rightDrive1.getPosition());
+					rightDrive1.getSelectedSensorPosition(0));
 			SmartDashboard.putNumber("Current Left Robot Drive EncVelocity: ",
-					leftDrive1.getEncVelocity());
+					leftDrive1.getSelectedSensorVelocity(0));
 			SmartDashboard.putNumber("Current Right Robot Drive EncVelocity: ",
-					rightDrive1.getEncVelocity());*/
+					rightDrive1.getSelectedSensorVelocity(0));
+			SmartDashboard.putNumber("Current Right Robot Drive Error: ",
+							rightDrive1.getClosedLoopError(0));
+			SmartDashboard.putNumber("Current Left Robot Drive Error: ",
+							leftDrive1.getClosedLoopError(0));
 		}
 	}
+	
+	public static boolean isFinished() {
+		return
+	            isRunning &&
+	            statusLeft.activePointValid &&
+	            statusLeft.isLast &&
+	            statusRight.activePointValid &&
+	            statusRight.isLast;
+	}
+	
+	public void setFinished(boolean isRunning) {
+		DriveTrain.isRunning = isRunning;
+	}
+	
+	public static void startFilling(double[][] profile, int totalCnt, char side) {
+		/* create an empty point */
+		TrajectoryPoint point = new TrajectoryPoint();
+		System.out.println("In start filling");
+		/* did we get an underrun condition since last time we checked ? */
+		if (side=='L'&&statusLeft.hasUnderrun) {
+			/* better log it so we know about it */
+			instrumentation.OnUnderrun();
+			/*
+			 * clear the error. This flag does not auto clear, this way 
+			 * we never miss logging it.
+			 */
+			leftDrive1.clearMotionProfileHasUnderrun(0);
+		}else {
+			if (side=='R'&&statusRight.hasUnderrun) {
+				instrumentation.OnUnderrun();
+				rightDrive1.clearMotionProfileHasUnderrun(0);
+			}
+		}
+		/*
+		 * just in case we are interrupting another MP and there is still buffer
+		 * points in memory, clear it.
+		 */
+		if(side=='L')
+			leftDrive1.clearMotionProfileTrajectories();
+		else
+			rightDrive1.clearMotionProfileTrajectories();
+		
+		/* This is fast since it's just into our TOP buffer */
+		for (int i = 0; i < totalCnt; ++i) {
+			double positionRot = profile[i][0];
+			double velocityRPM = profile[i][1];
+			/* for each point, fill our structure and pass it to API */
+			point.position = positionRot * 4096; //Convert Revolutions to Units
+			point.velocity = velocityRPM * 4096 / 600.0; //Convert RPM to Units/100ms
+			point.headingDeg = 0; /* future feature - not used in this example*/
+			point.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+			point.profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
+			point.timeDur = GetTrajectoryDuration((int)profile[i][2]);
+			point.zeroPos = false;
+			if (i == 0)
+				point.zeroPos = true; /* set this to true on the first point */
 
+			point.isLastPoint = false;
+			if ((i + 1) == totalCnt)
+				point.isLastPoint = true; /* set this to true on the last point  */
+			if(side=='L')
+				leftDrive1.pushMotionProfileTrajectory(point);
+			else	
+				rightDrive1.pushMotionProfileTrajectory(point);
+			
+		}
+		
+		
+	}
+	/**
+	 * Find enum value if supported.
+	 * @param durationMs
+	 * @return enum equivalent of durationMs
+	 */
+	private static TrajectoryDuration GetTrajectoryDuration(int durationMs)
+	{	 
+		/* create return value */
+		TrajectoryDuration retval = TrajectoryDuration.Trajectory_Duration_0ms;
+		/* convert duration to supported type */
+		retval = retval.valueOf(durationMs);
+		/* check that it is valid */
+		if (retval.value != durationMs) {
+			DriverStation.reportError("Trajectory Duration not supported - use configMotionProfileTrajectoryPeriod instead", false);		
+		}
+		/* pass to caller */
+		return retval;
+	}
+	
+	public static void startMP(){
+		SetValueMotionProfile setOutput = getSetValue();
+		
+		leftDrive1.set(setOutput.value);
+		rightDrive1.set(setOutput.value);
+		leftDrive1.processMotionProfileBuffer();
+		rightDrive1.processMotionProfileBuffer();
+				
+		leftDrive1.getMotionProfileStatus(statusLeft);
+		rightDrive1.getMotionProfileStatus(statusRight);
+		//System.out.println(setOutput.toString());
+		//System.out.println(setValue.toString());
+	}
+	
+	public static SetValueMotionProfile getSetValue() {
+		return setValue;
+	}
+
+	public static void setSetValue(SetValueMotionProfile newVal) {
+		setValue = newVal;
+	}
+	
+	public static void resetPosition(){
+		leftDrive1.setSelectedSensorPosition(0, 0, 10);
+		rightDrive1.setSelectedSensorPosition(0, 0, 10);
+	}
+	
+	public static void resetMP(){
+		leftDrive1.clearMotionProfileTrajectories();
+		rightDrive1.clearMotionProfileTrajectories();
+		setValue = SetValueMotionProfile.Disable;
+		leftDrive1.set(setValue.value);
+		rightDrive1.set(setValue.value);
+	}
 }
