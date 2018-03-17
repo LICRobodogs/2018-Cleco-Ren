@@ -49,15 +49,15 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 	public static final double ENCODER_TICKS_TO_INCHES = 4096 * Math.PI * 4.0;
 	
-	public static final double LEFT_P = 0.0;
+	public static final double LEFT_P = 1;
 	public static final double LEFT_I = 0.0;
 	public static final double LEFT_D = 0.0;
-	public static final double LEFT_F = 0.0;
+	public static final double LEFT_F = 1.0;
 
-	public static final double RIGHT_P = 0.0;
+	public static final double RIGHT_P = 1;
 	public static final double RIGHT_I = 0.0;
 	public static final double RIGHT_D = 0.0;
-	public static final double RIGHT_F = 0.0;
+	public static final double RIGHT_F = 1.0;
 	
 	private static WPI_TalonSRX leftDrive1;//Vel:5636u/100ms
 	private WPI_TalonSRX leftDrive2;
@@ -176,6 +176,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			driveWithJoystick();
 		} else if (controlMode == DriveTrainControlMode.AUTON) {
 			//executeMovement();
+			leftDrive1.getMotionProfileStatus(statusLeft);
+			rightDrive1.getMotionProfileStatus(statusRight);
 		}
 
 	}
@@ -200,6 +202,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 							rightDrive1.getClosedLoopError(0));
 			SmartDashboard.putNumber("Current Left Robot Drive Error: ",
 							leftDrive1.getClosedLoopError(0));
+			SmartDashboard.putBoolean("isFinished", isFinished());
+			SmartDashboard.putBoolean("isRunning", isRunning);
+			SmartDashboard.putString("Left Drive TALON MODE: ", leftDrive1.getControlMode().toString());
+			SmartDashboard.putString("Right Drive TALON MODE: ", rightDrive1.getControlMode().toString());
 		}
 	}
 	
@@ -212,7 +218,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	            statusRight.isLast;
 	}
 	
-	public void setFinished(boolean isRunning) {
+	public static void setRunning(boolean isRunning) {
 		DriveTrain.isRunning = isRunning;
 	}
 	
@@ -229,11 +235,9 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			 * we never miss logging it.
 			 */
 			leftDrive1.clearMotionProfileHasUnderrun(0);
-		}else {
-			if (side=='R'&&statusRight.hasUnderrun) {
+		}else if (side=='R'&&statusRight.hasUnderrun) {
 				instrumentation.OnUnderrun();
 				rightDrive1.clearMotionProfileHasUnderrun(0);
-			}
 		}
 		/*
 		 * just in case we are interrupting another MP and there is still buffer
@@ -249,8 +253,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			double positionRot = profile[i][0];
 			double velocityRPM = profile[i][1];
 			/* for each point, fill our structure and pass it to API */
-			point.position = positionRot * 4096; //Convert Revolutions to Units
-			point.velocity = velocityRPM * 4096 / 600.0; //Convert RPM to Units/100ms
+			point.position = positionRot;// * 4096; //Convert Revolutions to Units
+			point.velocity = velocityRPM;// * 4096 / 600.0; //Convert RPM to Units/100ms
 			point.headingDeg = 0; /* future feature - not used in this example*/
 			point.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
 			point.profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
@@ -293,14 +297,12 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static void startMP(){
 		SetValueMotionProfile setOutput = getSetValue();
 		
-		leftDrive1.set(setOutput.value);
-		rightDrive1.set(setOutput.value);
+		leftDrive1.set(ControlMode.MotionProfile,setOutput.value);
+		rightDrive1.set(ControlMode.MotionProfile, setOutput.value);
 		leftDrive1.processMotionProfileBuffer();
 		rightDrive1.processMotionProfileBuffer();
-				
-		leftDrive1.getMotionProfileStatus(statusLeft);
-		rightDrive1.getMotionProfileStatus(statusRight);
-		//System.out.println(setOutput.toString());
+		setRunning(true);
+		System.out.println("In StartMP");
 		//System.out.println(setValue.toString());
 	}
 	

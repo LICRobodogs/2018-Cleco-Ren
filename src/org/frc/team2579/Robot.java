@@ -78,7 +78,7 @@ public class Robot extends IterativeRobot {
 		DriveTrain.resetPosition();
 	
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.AUTON,0);
-		driveTrain.setPeriodMs(20);
+		driveTrain.setPeriodMs(10);
 	    controlLoop.start();
 	    
 	    autonomousCommand = autonChooser.getSelected();

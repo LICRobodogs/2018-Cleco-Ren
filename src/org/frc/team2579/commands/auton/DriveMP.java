@@ -31,14 +31,14 @@ public class DriveMP extends Command{
     }
 		
 	protected void end() {
-    	DriveTrain.resetMP();
     	DriveTrain.setSetValue(SetValueMotionProfile.Disable);
+    	DriveTrain.resetMP();
     }
 	@Override
 	protected boolean isFinished() {
 		//if(DriveTrain._status.hasUnderrun)
 		//	return true;
-		System.out.println(DriveTrain.isFinished());
+		//System.out.println(DriveTrain.isFinished());
 		return DriveTrain.isFinished();
 	}
 }
