@@ -51,17 +51,17 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static double m_periodMs;
 
 	public static final double ENCODER_TICKS_TO_INCHES = 4096 * Math.PI * 4.0;
-	public static final int DRIVE_TICKS_PER_FOOT = 0; //Move robot 10 feet, get position from sensor, divide by 10
+	public static final int DRIVE_TICKS_PER_FOOT = 3852; //Move robot 10 feet, get position from sensor, divide by 10
 
-	public static final double LEFT_P = 0;
+	public static final double LEFT_P = 0.1;
 	public static final double LEFT_I = 0.0;
 	public static final double LEFT_D = 0.0;
-	public static final double LEFT_F = 1023/5636;
+	public static final double LEFT_F = 1023/2700;
 
-	public static final double RIGHT_P = 0;
+	public static final double RIGHT_P = 0.1;
 	public static final double RIGHT_I = 0.0;
 	public static final double RIGHT_D = 0.0;
-	public static final double RIGHT_F = 1023/5802;
+	public static final double RIGHT_F = 1023/2700;
 
 	private static VikingSRX leftDrive1;// Vel:5636u/100ms
 	private WPI_TalonSRX leftDrive2;
@@ -114,7 +114,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			rightDrive1.configPeakOutputReverse(-1, 10);
 			rightDrive2.configPeakOutputReverse(-1, 10);
 
-			leftDrive1.setSensorPhase(false);
+			rightDrive1.setSensorPhase(false);
+			leftDrive1.setInverted(true);
 
 			leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -223,6 +224,11 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		profileFollower.setProfiles(profiles);
 	}
 
+	public void executeDrive() {
+		profileFollower.processMotionProfileBufferPeriodic();
+		profileFollower.followProfilePeriodic();
+	}
+	
 	public void startProfileDrive() {
 		profileFollower.startFollowing();
 	}

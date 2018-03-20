@@ -21,6 +21,10 @@ public class FollowProfile extends Command {
 
 	// We don't need an execute method because all the profile following happens in
 	// Notifiers, on a different thread
+	
+	public void execute() {
+		Robot.driveTrain.executeDrive();
+	}
 
 	@Override
 	public boolean isFinished() {

@@ -67,7 +67,7 @@ public class ProfileFollower {
 		}
 		initFollowProfile();
 		System.out.println("Starting notifiers");
-		processBuffer.startPeriodic(20 / 2000);
+		//processBuffer.startPeriodic(20 / 2000);
 		System.out.println("Notifiers started");
 	}
 
@@ -75,6 +75,6 @@ public class ProfileFollower {
 		System.out.println("stopFollowing");
 		left.reset();
 		right.reset();
-		processBuffer.stop();
+		//processBuffer.stop();
 	}
 }

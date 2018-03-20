@@ -16,6 +16,7 @@ import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -29,11 +30,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the build.properties file in the
  * project.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 
-	public static final DriveTrain driveTrain = new DriveTrain();
-	public static final Intake intake = new Intake();
-	public static final Arm arm = new Arm();
+	public static DriveTrain driveTrain;
+	public static Intake intake;
+	public static Arm arm;
 
 	Command autonomousCommand;
 	public static SendableChooser<Command> autonChooser;
@@ -53,6 +54,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		driveTrain = new DriveTrain();
+		intake = new Intake();
+		arm = new Arm();
 		controlLoop.addLoopable(driveTrain);
 		// controlLoop.addLoopable(arm);
 		controlLoop.addLoopable(intake);
@@ -82,9 +86,9 @@ public class Robot extends IterativeRobot {
 		// DriveTrain.resetPosition();
 		driveTrain.resetTalons();
 
-		Robot.driveTrain.setControlMode(DriveTrainControlMode.AUTON, 0);
+		driveTrain.setControlMode(DriveTrainControlMode.AUTON, 0);
 		driveTrain.setPeriodMs(10);
-		controlLoop.start();
+		//controlLoop.start();
 
 		autonomousCommand = autonChooser.getSelected();
 		if (autonomousCommand != null) {
@@ -102,11 +106,14 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		driveTrain.resetTalons();
-		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
+		//autonomousCommand.cancel();
+		Scheduler.getInstance().removeAll();
+		driveTrain.stopProfileDrive();
+		driveTrain.zeroEncoders();
+		driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
 		// Robot.arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
-		controlLoop.start();
+		//controlLoop.start();
 	}
 
 	/**
@@ -127,6 +134,8 @@ public class Robot extends IterativeRobot {
 
 	public void disabledInit() {
 		// arm.resetArmEncoder();
+		Scheduler.getInstance().removeAll();
+		driveTrain.stopProfileDrive();
 	}
 
 	public void disabledPeriodic() {
@@ -142,7 +151,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void setupAutonChooser() {
-		autonChooser = new SendableChooser<Command>();
+		autonChooser = new SendableChooser<>();
 		autonChooser.addDefault("Switch Left", new CenterSwitchAuton());
 		autonChooser.addObject("Do Nothing", new CommandGroup());
 		SmartDashboard.putData("Auton Setting", autonChooser);
