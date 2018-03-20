@@ -53,15 +53,15 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static final double ENCODER_TICKS_TO_INCHES = 4096 * Math.PI * 4.0;
 	public static final int DRIVE_TICKS_PER_FOOT = 0; //Move robot 10 feet, get position from sensor, divide by 10
 
-	public static final double LEFT_P = 1;
+	public static final double LEFT_P = 0;
 	public static final double LEFT_I = 0.0;
 	public static final double LEFT_D = 0.0;
-	public static final double LEFT_F = 1.0;
+	public static final double LEFT_F = 1023/5636;
 
-	public static final double RIGHT_P = 1;
+	public static final double RIGHT_P = 0;
 	public static final double RIGHT_I = 0.0;
 	public static final double RIGHT_D = 0.0;
-	public static final double RIGHT_F = 1.0;
+	public static final double RIGHT_F = 1023/5802;
 
 	private static VikingSRX leftDrive1;// Vel:5636u/100ms
 	private WPI_TalonSRX leftDrive2;

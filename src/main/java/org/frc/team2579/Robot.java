@@ -80,6 +80,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		// DriveTrain.resetMP();
 		// DriveTrain.resetPosition();
+		driveTrain.resetTalons();
 
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.AUTON, 0);
 		driveTrain.setPeriodMs(10);
@@ -101,6 +102,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
+		driveTrain.resetTalons();
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
 		// Robot.arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
