@@ -52,7 +52,7 @@ public class Arm extends Subsystem implements ControlLoopable {
     public static double mArmKd = 0.25;//.25
     public static double mArmKf = 0.0;
     public static int mArmIZone = (int) (1023.0 / mArmKp);
-    public static double mArmRampRate = .5;
+    public static double mArmRampRate = .2;
     public static int mArmAllowableError = 0;
     
     private DigitalInput homeLimit;

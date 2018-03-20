@@ -77,11 +77,19 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			//leftDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
 			leftDrive2 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
 			//leftDrive1.setPID(LEFT_P, LEFT_I, LEFT_D);
+			leftDrive1.config_kP(0, LEFT_P, 10);
+			leftDrive1.config_kI(0, LEFT_I, 10);
+			leftDrive1.config_kD(0, LEFT_D, 10);
+			leftDrive1.config_kF(0, LEFT_F, 10);
 
 			rightDrive1 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_RIGHT_MOTOR1_CAN_ID);
 			//rightDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
 			rightDrive2 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
 			//rightDrive1.setPID(RIGHT_P, RIGHT_I, RIGHT_D);
+			rightDrive1.config_kP(0, RIGHT_P, 10);
+			rightDrive1.config_kI(0, RIGHT_I, 10);
+			rightDrive1.config_kD(0, RIGHT_D, 10);
+			rightDrive1.config_kF(0, RIGHT_F, 10);
 
 			leftDrive2.follow(leftDrive1);
 			rightDrive2.follow(rightDrive1);
