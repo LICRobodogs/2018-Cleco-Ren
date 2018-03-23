@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
 		driveTrain = new DriveTrain();
 		intake = new Intake();
 		arm = new Arm();
+		oi = new OI();
 		controlLoop.addLoopable(driveTrain);
 		controlLoop.addLoopable(arm);
 		controlLoop.addLoopable(intake);
@@ -107,10 +108,10 @@ public class Robot extends TimedRobot {
 
 	public void teleopInit() {
 		//autonomousCommand.cancel();
-		Scheduler.getInstance().removeAll();
-		driveTrain.stopProfileDrive();
+		//Scheduler.getInstance().removeAll();
+		//driveTrain.stopProfileDrive();
 		driveTrain.zeroEncoders();
-		driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
+		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
 		arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
 		//controlLoop.start();
@@ -134,7 +135,7 @@ public class Robot extends TimedRobot {
 
 	public void disabledInit() {
 		arm.resetArmEncoder();
-		Scheduler.getInstance().removeAll();
+		//Scheduler.getInstance().removeAll();
 		driveTrain.stopProfileDrive();
 	}
 
@@ -152,8 +153,8 @@ public class Robot extends TimedRobot {
 
 	public void setupAutonChooser() {
 		autonChooser = new SendableChooser<>();
-		autonChooser.addDefault("Switch Left", new CenterSwitchAuton());
-		autonChooser.addObject("Do Nothing", new CommandGroup());
+		autonChooser.addObject("Switch Left", new CenterSwitchAuton());
+		autonChooser.addDefault("Do Nothing", new CommandGroup());
 		SmartDashboard.putData("Auton Setting", autonChooser);
 	}
 }

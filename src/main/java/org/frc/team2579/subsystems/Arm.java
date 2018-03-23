@@ -58,38 +58,40 @@ public class Arm extends Subsystem implements ControlLoopable {
 	private DigitalInput homeLimit;
 
 	public Arm() {
-		try {/*
-				 * clawPiston = new
-				 * DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID,RobotMap.CLAW_OUT_PCM_ID); shootPiston
-				 * = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID,RobotMap.SHOOT_OUT_PCM_ID);
-				 * shiftPiston = new
-				 * DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID,RobotMap.SHIFT_OUT_PCM_ID);
-				 * 
-				 * homeLimit = new DigitalInput(RobotMap.ARM_HOME_LIMIT_PORT);
-				 * 
-				 * armTalon = new WPI_TalonSRX(RobotMap.ARM_TALON1_CAN_ID); armFollower1 = new
-				 * WPI_VictorSPX(RobotMap.ARM_VICTOR1_CAN_ID); armFollower2 = new
-				 * WPI_VictorSPX(RobotMap.ARM_VICTOR2_CAN_ID);
-				 * 
-				 * armFollower1.follow(armTalon); armFollower2.follow(armTalon);
-				 * //armFollower2.setInverted(true);
-				 * 
-				 * //test armFollower1.setInverted(true); armTalon.setInverted(true);
-				 * 
-				 * armTalon.setNeutralMode(NeutralMode.Brake);
-				 * armTalon.configSelectedFeedbackSensor(FeedbackDevice.
-				 * CTRE_MagEncoder_Relative, 0, 10); armTalon.setSensorPhase(true);
-				 * armTalon.config_kP(0, mArmKp, 10); armTalon.config_kI(0, mArmKi, 10);
-				 * armTalon.config_kD(0, mArmKd, 10); armTalon.config_kF(0, mArmKf, 10);
-				 * armTalon.config_IntegralZone(0, mArmIZone, 10);
-				 * armTalon.configClosedloopRamp(mArmRampRate, 10);
-				 * armTalon.configNominalOutputForward(0, 10);
-				 * armTalon.configNominalOutputReverse(0, 10);
-				 * armTalon.configPeakOutputForward(ARM_MOTOR_VOLTAGE_PERCENT_LIMIT, 10);
-				 * armTalon.configPeakOutputReverse(-ARM_MOTOR_VOLTAGE_PERCENT_LIMIT, 10);
-				 * resetArmEncoder(); setArmGearbox(ArmGearboxState.ARM_DOG); //mAngle = 0;
-				 * armTalon.set(ControlMode.Position, 0);
-				 */
+		try {
+			clawPiston = new DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID, RobotMap.CLAW_OUT_PCM_ID);
+			shootPiston = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID, RobotMap.SHOOT_OUT_PCM_ID);
+			shiftPiston = new DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID, RobotMap.SHIFT_OUT_PCM_ID);
+
+			homeLimit = new DigitalInput(RobotMap.ARM_HOME_LIMIT_PORT);
+
+			armTalon = new WPI_TalonSRX(RobotMap.ARM_TALON1_CAN_ID);
+			armFollower1 = new WPI_VictorSPX(RobotMap.ARM_VICTOR1_CAN_ID);
+			armFollower2 = new WPI_VictorSPX(RobotMap.ARM_VICTOR2_CAN_ID);
+
+			armFollower1.follow(armTalon);
+			armFollower2.follow(armTalon);
+			// armFollower2.setInverted(true);
+
+			// test armFollower1.setInverted(true); armTalon.setInverted(true);
+
+			armTalon.setNeutralMode(NeutralMode.Brake);
+			armTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+			armTalon.setSensorPhase(true);
+			armTalon.config_kP(0, mArmKp, 10);
+			armTalon.config_kI(0, mArmKi, 10);
+			armTalon.config_kD(0, mArmKd, 10);
+			armTalon.config_kF(0, mArmKf, 10);
+			armTalon.config_IntegralZone(0, mArmIZone, 10);
+			armTalon.configClosedloopRamp(mArmRampRate, 10);
+			armTalon.configNominalOutputForward(0, 10);
+			armTalon.configNominalOutputReverse(0, 10);
+			armTalon.configPeakOutputForward(ARM_MOTOR_VOLTAGE_PERCENT_LIMIT, 10);
+			armTalon.configPeakOutputReverse(-ARM_MOTOR_VOLTAGE_PERCENT_LIMIT, 10);
+			resetArmEncoder();
+			setArmGearbox(ArmGearboxState.ARM_DOG); // mAngle = 0;
+			armTalon.set(ControlMode.Position, 0);
+
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Arm constructor");
 		}

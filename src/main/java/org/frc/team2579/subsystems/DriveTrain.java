@@ -118,13 +118,13 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			rightDrive2.configPeakOutputReverse(-1, 10);
 
 			rightDrive1.setSensorPhase(false);
-			leftDrive1.setInverted(true);
+			//leftDrive1.setInverted(true);
 
 			leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-			leftDrive1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20,10);
-			rightDrive1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20,10);
+			//leftDrive1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20,10);
+			//rightDrive1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20,10);
 			
 			m_drive = new DifferentialDrive(leftDrive1, rightDrive1);
 
