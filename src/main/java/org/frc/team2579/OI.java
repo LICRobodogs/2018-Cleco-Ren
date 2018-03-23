@@ -41,35 +41,35 @@ public class OI {
 		m_operatorGamepad = new GamePad(RobotMap.OPERATOR_GAMEPAD_USB_ID);
 
 		// DRIVER CONTROLS
-		/*
-		 * JoystickButton armReload = new
-		 * JoystickButton(m_driverGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
-		 * armReload.whenPressed(new ArmPistonPosition(ArmPistonState.RELOAD));
-		 * 
-		 * JoystickButton armShoot = new
-		 * JoystickButton(m_driverGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
-		 * armShoot.whenPressed(new ArmPistonPosition(ArmPistonState.SHOOT));
-		 * 
-		 * JoystickButton armHome = new
-		 * JoystickButton(m_driverGamepad.getJoyStick(),GamePad.A_BUTTON);
-		 * armHome.whenPressed(new ArmHome());
-		 * 
-		 * JoystickButton armSwitch = new
-		 * JoystickButton(m_driverGamepad.getJoyStick(),GamePad.B_BUTTON);
-		 * armSwitch.whenPressed(new ArmSwitchScore());
-		 * 
-		 * JoystickButton armScale = new
-		 * JoystickButton(m_driverGamepad.getJoyStick(),GamePad.Y_BUTTON);
-		 * armScale.whenPressed(new ArmScaleScore());
-		 * 
-		 * DPadButton armGearboxDogArm = new DPadButton(m_driverGamepad,
-		 * DPadButton.Direction.RIGHT); armGearboxDogArm.whenPressed(new
-		 * ArmGearboxPistonPosition(ArmGearboxState.ARM_DOG));
-		 * 
-		 * DPadButton armGearboxDogClimb = new DPadButton(m_driverGamepad,
-		 * DPadButton.Direction.LEFT); armGearboxDogClimb.whenPressed(new
-		 * ArmGearboxPistonPosition(ArmGearboxState.CLIMB_DOG));
-		 */
+		
+		  JoystickButton armReload = new
+		  JoystickButton(m_driverGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
+		  armReload.whenPressed(new ArmPistonPosition(ArmPistonState.RELOAD));
+		  
+		  JoystickButton armShoot = new
+		  JoystickButton(m_driverGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
+		  armShoot.whenPressed(new ArmPistonPosition(ArmPistonState.SHOOT));
+		  
+		  JoystickButton armHome = new
+		  JoystickButton(m_driverGamepad.getJoyStick(),GamePad.A_BUTTON);
+		  armHome.whenPressed(new ArmHome());
+		  
+		  JoystickButton armSwitch = new
+		  JoystickButton(m_driverGamepad.getJoyStick(),GamePad.B_BUTTON);
+		  armSwitch.whenPressed(new ArmSwitchScore());
+		  
+		  JoystickButton armScale = new
+		  JoystickButton(m_driverGamepad.getJoyStick(),GamePad.Y_BUTTON);
+		  armScale.whenPressed(new ArmScaleScore());
+		  
+		  DPadButton armGearboxDogArm = new DPadButton(m_driverGamepad,
+		  DPadButton.Direction.RIGHT); armGearboxDogArm.whenPressed(new
+		  ArmGearboxPistonPosition(ArmGearboxState.ARM_DOG));
+		  
+		  DPadButton armGearboxDogClimb = new DPadButton(m_driverGamepad,
+		  DPadButton.Direction.LEFT); armGearboxDogClimb.whenPressed(new
+		  ArmGearboxPistonPosition(ArmGearboxState.CLIMB_DOG));
+		 
 
 		// OPERATOR CONTROLS
 		GamePadTriggerButton intakeOut = new GamePadTriggerButton(m_operatorGamepad, GamePad.LEFT_TRIGGER_AXIS);
@@ -89,15 +89,15 @@ public class OI {
 		JoystickButton intakeUnstuck = new JoystickButton(m_operatorGamepad.getJoyStick(), GamePad.B_BUTTON);
 		intakeUnstuck.whenPressed(new IntakeQuickInOut());
 
-		/*
-		 * JoystickButton clawRelease = new
-		 * JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
-		 * clawRelease.whenPressed(new ArmPistonPosition(ArmPistonState.RELEASE));
-		 * 
-		 * JoystickButton clawGrab = new
-		 * JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
-		 * clawGrab.whenPressed(new ArmPistonPosition(ArmPistonState.GRAB));
-		 */
+		
+		  JoystickButton clawRelease = new
+		  JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.LEFT_BUMPER_BUTTON);
+		  clawRelease.whenPressed(new ArmPistonPosition(ArmPistonState.RELEASE));
+		  
+		  JoystickButton clawGrab = new
+		  JoystickButton(m_operatorGamepad.getJoyStick(),GamePad.RIGHT_BUMPER_BUTTON);
+		  clawGrab.whenPressed(new ArmPistonPosition(ArmPistonState.GRAB));
+		 
 		JoystickButton intakeArmIn = new JoystickButton(m_operatorGamepad.getJoyStick(), GamePad.A_BUTTON);
 		intakeArmIn.whileActive(new IntakeInnerWheelPosition(IntakePistonState.IN));
 
@@ -122,33 +122,33 @@ public class OI {
 		testInnerIntakeOut.whenPressed(new IntakeInnerWheelPosition(IntakePistonState.OUT));
 		SmartDashboard.putData("Intake Inner OUT", testInnerIntakeOut);
 
-		/*
-		 * Button testClawGrab = new InternalButton(); testClawGrab.whenPressed(new
-		 * ArmPistonPosition(ArmPistonState.GRAB));
-		 * SmartDashboard.putData("Arm Claw Grab", testClawGrab);
-		 * 
-		 * Button testClawRelease = new InternalButton();
-		 * testClawRelease.whenPressed(new ArmPistonPosition(ArmPistonState.RELEASE));
-		 * SmartDashboard.putData("Arm Claw Release", testClawRelease);
-		 * 
-		 * Button testArmShoot = new InternalButton(); testArmShoot.whenPressed(new
-		 * ArmPistonPosition(ArmPistonState.SHOOT)); SmartDashboard.putData("Arm Shoot",
-		 * testArmShoot);
-		 * 
-		 * Button testArmReload = new InternalButton(); testArmReload.whenPressed(new
-		 * ArmPistonPosition(ArmPistonState.RELOAD));
-		 * SmartDashboard.putData("Arm Reload", testArmReload);
-		 * 
-		 * Button testArmGearboxArmDog = new InternalButton();
-		 * testArmGearboxArmDog.whenPressed(new
-		 * ArmGearboxPistonPosition(ArmGearboxState.ARM_DOG));
-		 * SmartDashboard.putData("Gearbox ARM Dog", testArmGearboxArmDog);
-		 * 
-		 * Button testArmGearboxClimbDog = new InternalButton();
-		 * testArmGearboxClimbDog.whenPressed(new
-		 * ArmGearboxPistonPosition(ArmGearboxState.CLIMB_DOG));
-		 * SmartDashboard.putData("Gearbox CLIMB Dog", testArmGearboxClimbDog);
-		 */
+		
+		  Button testClawGrab = new InternalButton(); testClawGrab.whenPressed(new
+		  ArmPistonPosition(ArmPistonState.GRAB));
+		  SmartDashboard.putData("Arm Claw Grab", testClawGrab);
+		  
+		  Button testClawRelease = new InternalButton();
+		  testClawRelease.whenPressed(new ArmPistonPosition(ArmPistonState.RELEASE));
+		  SmartDashboard.putData("Arm Claw Release", testClawRelease);
+		  
+		  Button testArmShoot = new InternalButton(); testArmShoot.whenPressed(new
+		  ArmPistonPosition(ArmPistonState.SHOOT)); SmartDashboard.putData("Arm Shoot",
+		  testArmShoot);
+		  
+		  Button testArmReload = new InternalButton(); testArmReload.whenPressed(new
+		  ArmPistonPosition(ArmPistonState.RELOAD));
+		  SmartDashboard.putData("Arm Reload", testArmReload);
+		  
+		  Button testArmGearboxArmDog = new InternalButton();
+		  testArmGearboxArmDog.whenPressed(new
+		  ArmGearboxPistonPosition(ArmGearboxState.ARM_DOG));
+		  SmartDashboard.putData("Gearbox ARM Dog", testArmGearboxArmDog);
+		  
+		  Button testArmGearboxClimbDog = new InternalButton();
+		  testArmGearboxClimbDog.whenPressed(new
+		  ArmGearboxPistonPosition(ArmGearboxState.CLIMB_DOG));
+		  SmartDashboard.putData("Gearbox CLIMB Dog", testArmGearboxClimbDog);
+		 
 	}
 
 	public GamePad getDriverGamepad() {

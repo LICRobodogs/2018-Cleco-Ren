@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 		intake = new Intake();
 		arm = new Arm();
 		controlLoop.addLoopable(driveTrain);
-		// controlLoop.addLoopable(arm);
+		controlLoop.addLoopable(arm);
 		controlLoop.addLoopable(intake);
 		/*
 		 * m_chooser.addDefault("Default Auto", kDefaultAuto);
@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
 		driveTrain.stopProfileDrive();
 		driveTrain.zeroEncoders();
 		driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
-		// Robot.arm.setControlMode(ArmControlMode.MANUAL);
+		arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
 		//controlLoop.start();
 	}
@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public void disabledInit() {
-		// arm.resetArmEncoder();
+		arm.resetArmEncoder();
 		Scheduler.getInstance().removeAll();
 		driveTrain.stopProfileDrive();
 	}
@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
 	}
 
 	public void updateStatus() {
-		// arm.updateStatus(operationMode);
+		arm.updateStatus(operationMode);
 		driveTrain.updateStatus(operationMode);
 	}
 

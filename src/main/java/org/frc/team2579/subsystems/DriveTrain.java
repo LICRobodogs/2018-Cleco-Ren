@@ -14,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
 import org.frc.team2579.utility.ControlLoopable;
 import org.frc.team2579.utility.Profile;
 import org.frc.team2579.utility.ProfileFollower;
@@ -65,10 +67,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static final double RIGHT_F = 1023/2700;
 
 	private VikingSRX leftDrive1;// Vel:5636u/100ms
-	private WPI_TalonSRX leftDrive2;
+	private WPI_VictorSPX leftDrive2;
 
 	private VikingSRX rightDrive1;// Vel:5802u/100ms
-	private WPI_TalonSRX rightDrive2;
+	private WPI_VictorSPX rightDrive2;
 
 	private static MotionProfileStatus statusLeft, statusRight;
 
@@ -82,7 +84,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		try {
 			leftDrive1 = new VikingSRX(RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID);
 			// leftDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
-			leftDrive2 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
+			leftDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
 			// leftDrive1.setPID(LEFT_P, LEFT_I, LEFT_D);
 			leftDrive1.config_kP(0, LEFT_P, 10);
 			leftDrive1.config_kI(0, LEFT_I, 10);
@@ -91,7 +93,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 			rightDrive1 = new VikingSRX(RobotMap.DRIVETRAIN_RIGHT_MOTOR1_CAN_ID);
 			// rightDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
-			rightDrive2 = new WPI_TalonSRX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
+			rightDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
 			// rightDrive1.setPID(RIGHT_P, RIGHT_I, RIGHT_D);
 			rightDrive1.config_kP(0, RIGHT_P, 10);
 			rightDrive1.config_kI(0, RIGHT_I, 10);
