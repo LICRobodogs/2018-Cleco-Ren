@@ -12,6 +12,7 @@ import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import org.frc.team2579.utility.ControlLoopable;
 import org.frc.team2579.utility.Profile;
@@ -63,10 +64,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static final double RIGHT_D = 0.0;
 	public static final double RIGHT_F = 1023/2700;
 
-	private static VikingSRX leftDrive1;// Vel:5636u/100ms
+	private VikingSRX leftDrive1;// Vel:5636u/100ms
 	private WPI_TalonSRX leftDrive2;
 
-	private static VikingSRX rightDrive1;// Vel:5802u/100ms
+	private VikingSRX rightDrive1;// Vel:5802u/100ms
 	private WPI_TalonSRX rightDrive2;
 
 	private static MotionProfileStatus statusLeft, statusRight;
@@ -120,12 +121,15 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
+			leftDrive1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20,10);
+			rightDrive1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20,10);
+			
 			m_drive = new DifferentialDrive(leftDrive1, rightDrive1);
 
 			m_drive.setSafetyEnabled(false);
 
-			statusLeft = new MotionProfileStatus();
-			statusRight = new MotionProfileStatus();
+			//statusLeft = new MotionProfileStatus();
+			//statusRight = new MotionProfileStatus();
 			profileFollower = new ProfileFollower(leftDrive1, rightDrive1);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the DriveTrain constructor");
@@ -192,8 +196,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			driveWithJoystick();
 		} else if (controlMode == DriveTrainControlMode.AUTON) {
 			// executeMovement();
-			leftDrive1.getMotionProfileStatus(statusLeft);
-			rightDrive1.getMotionProfileStatus(statusRight);
+			//leftDrive1.getMotionProfileStatus(statusLeft);
+			//rightDrive1.getMotionProfileStatus(statusRight);
 		}
 
 	}
