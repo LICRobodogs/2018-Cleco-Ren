@@ -42,7 +42,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 
 	private static final double NATIVE_TO_ANGLE_FACTOR = (80 / 12) * (60 / 14);
 	private static double offset;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.8 / 12.0;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.0 / 12.0;
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 230;
 	public static final double SWITCH_ANGLE_SETPOINT = 80;
@@ -73,7 +73,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 			armFollower2.follow(armTalon);
 			// armFollower2.setInverted(true);
 
-			// test armFollower1.setInverted(true); armTalon.setInverted(true);
+			armFollower1.setInverted(true); 
+			armTalon.setInverted(true);
 
 			armTalon.setNeutralMode(NeutralMode.Brake);
 			armTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -215,7 +216,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 	private double getArmAngle() {
 		// return
 		// ((double)armTalon.getSelectedSensorPosition(0))/NATIVE_TO_ANGLE_FACTOR;
-		return armTalon.getSensorCollection().getPulseWidthPosition() / NATIVE_TO_ANGLE_FACTOR - offset;
+		double angle = Math.abs(armTalon.getSensorCollection().getPulseWidthPosition() / NATIVE_TO_ANGLE_FACTOR - offset);
+		return angle < 0.1 ? 0:angle;
 	}
 
 	public void resetArmEncoder() {

@@ -144,6 +144,14 @@ public class OI {
 	public GamePad getOperatorGamepad() {
 		return m_operatorGamepad;
 	}
+	
+	public double getMoveInput() {
+		return -(getDriverGamepad().getRightTriggerAxis() - getDriverGamepad().getLeftTriggerAxis());
+	}
+	
+	public double getSteerInput() {
+		return getDriverGamepad().getLeftXAxis();
+	}
 
 	public static OI getInstance() {
 		if (instance == null) {

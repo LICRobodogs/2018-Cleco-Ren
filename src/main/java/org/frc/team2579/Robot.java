@@ -108,13 +108,13 @@ public class Robot extends TimedRobot {
 
 	public void teleopInit() {
 		//autonomousCommand.cancel();
-		//Scheduler.getInstance().removeAll();
-		//driveTrain.stopProfileDrive();
+		Scheduler.getInstance().removeAll();
+		driveTrain.stopProfileDrive();
 		driveTrain.zeroEncoders();
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
 		arm.setControlMode(ArmControlMode.MANUAL);
 		driveTrain.setPeriodMs(10);
-		//controlLoop.start();
+		controlLoop.start();
 	}
 
 	/**
@@ -135,12 +135,12 @@ public class Robot extends TimedRobot {
 
 	public void disabledInit() {
 		arm.resetArmEncoder();
-		//Scheduler.getInstance().removeAll();
+		Scheduler.getInstance().removeAll();
 		driveTrain.stopProfileDrive();
 	}
 
 	public void disabledPeriodic() {
-		// updateStatus();
+		updateStatus();
 		// DriveTrain.resetMP();
 		// DriveTrain.resetPosition();
 		Scheduler.getInstance().run();
