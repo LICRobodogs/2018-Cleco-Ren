@@ -8,6 +8,7 @@
 package org.frc.team2579;
 
 import org.frc.team2579.commands.auton.CenterSwitchAuton;
+import org.frc.team2579.commands.auton.StraightOnly;
 import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.DriveTrain;
 import org.frc.team2579.subsystems.Intake;
@@ -153,8 +154,9 @@ public class Robot extends TimedRobot {
 
 	public void setupAutonChooser() {
 		autonChooser = new SendableChooser<>();
-		autonChooser.addObject("Switch Left", new CenterSwitchAuton());
-		autonChooser.addDefault("Do Nothing", new CommandGroup());
+		autonChooser.addDefault("Straight Only", new StraightOnly());
+		autonChooser.addObject("Center Switch", new CenterSwitchAuton());
+		autonChooser.addObject("Do Nothing", new CommandGroup());
 		SmartDashboard.putData("Auton Setting", autonChooser);
 	}
 }
