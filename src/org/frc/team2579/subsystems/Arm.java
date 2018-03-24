@@ -42,7 +42,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	
 	private static final double NATIVE_TO_ANGLE_FACTOR = (80/12)*(60/14);
 	private static double offset;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4/12.0;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.8/12.0;
 	public double mAngle;
 	public static final double SCALE_ANGLE_SETPOINT = 230;
 	public static final double SWITCH_ANGLE_SETPOINT = 80;

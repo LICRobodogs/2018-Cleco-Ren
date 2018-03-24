@@ -1,4 +1,3 @@
-
 package org.frc.team2579.subsystems;
 
 //import org.frc.team2579.utility.CANTalonEncoder;
@@ -83,8 +82,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			leftDrive1.setNeutralMode(NeutralMode.Brake);
 
 			rightDrive1.setNeutralMode(NeutralMode.Brake);
-			leftDrive1.configOpenloopRamp(0.2, 10);
-			rightDrive1.configOpenloopRamp(0.2, 10);
+			
 /*			leftDrive1
 					.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 			rightDrive1
