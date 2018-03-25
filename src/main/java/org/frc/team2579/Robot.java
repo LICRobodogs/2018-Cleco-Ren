@@ -93,11 +93,14 @@ public class Robot extends TimedRobot {
 		driveTrain.setPeriodMs(10);
 		//controlLoop.start();
 
-		/*autonomousCommand = autonChooser.getSelected();
+		autonomousCommand = autonChooser.getSelected();
 		if (autonomousCommand != null) {
+			if(autonomousCommand instanceof CenterSwitchAuton) {
+				((CenterSwitchAuton) autonomousCommand).preInit();
+			}
 			autonomousCommand.start();
 		}
-		*/
+		
 	}
 
 	/**
@@ -162,7 +165,7 @@ public class Robot extends TimedRobot {
 	public void setupAutonChooser() {
 		autonChooser = new SendableChooser<>();
 		autonChooser.addDefault("Straight Only", new StraightOnly());
-		//autonChooser.addObject("Center Switch", new CenterSwitchAuton());
+		autonChooser.addObject("Center Switch", new CenterSwitchAuton());
 		autonChooser.addObject("Do Nothing", new CommandGroup());
 		SmartDashboard.putData("Auton Setting", autonChooser);
 	}

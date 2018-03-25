@@ -9,11 +9,18 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class CenterSwitchAuton extends CommandGroup {
+	FollowProfile runner;
 	public CenterSwitchAuton() {
-		addSequential(new FollowProfile(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L')?"SwitchL":"SwitchR"));
+		runner = new FollowProfile("SwitchL");
+		addSequential(runner);
 		//addSequential(new DriveMP(SwitchLeftSideLeftPath.Points, SwitchLeftSideLeftPath.kNumPoints, SwitchLeftSideRightPath.Points, SwitchLeftSideRightPath.kNumPoints));
 		addSequential(new IntakeSpeed(0.7));
 		addSequential(new WaitCommand(3));
 		addSequential(new IntakeSpeedOff());
 	}
+	
+	public void preInit() {
+		runner.loadNewProfile(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L')?"SwitchL":"SwitchR");
+	}
+	
 }
