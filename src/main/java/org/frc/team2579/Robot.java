@@ -18,6 +18,7 @@ import org.frc.team2579.utility.ControlLooper;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -88,14 +89,15 @@ public class Robot extends TimedRobot {
 		// DriveTrain.resetPosition();
 		driveTrain.resetTalons();
 
-		driveTrain.setControlMode(DriveTrainControlMode.AUTON, 0);
+		driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK, 0);
 		driveTrain.setPeriodMs(10);
 		//controlLoop.start();
 
-		autonomousCommand = autonChooser.getSelected();
+		/*autonomousCommand = autonChooser.getSelected();
 		if (autonomousCommand != null) {
 			autonomousCommand.start();
 		}
+		*/
 	}
 
 	/**
@@ -105,6 +107,11 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		updateStatus();
+		Timer.delay(2);
+		driveTrain.setSpeed(-0.4, 0.4);
+		Timer.delay(1.9);
+		driveTrain.setSpeed(0, 0);
+		Timer.delay(5);
 	}
 
 	public void teleopInit() {
@@ -155,7 +162,7 @@ public class Robot extends TimedRobot {
 	public void setupAutonChooser() {
 		autonChooser = new SendableChooser<>();
 		autonChooser.addDefault("Straight Only", new StraightOnly());
-		autonChooser.addObject("Center Switch", new CenterSwitchAuton());
+		//autonChooser.addObject("Center Switch", new CenterSwitchAuton());
 		autonChooser.addObject("Do Nothing", new CommandGroup());
 		SmartDashboard.putData("Auton Setting", autonChooser);
 	}

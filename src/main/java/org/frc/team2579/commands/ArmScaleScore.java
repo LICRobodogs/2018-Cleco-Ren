@@ -17,7 +17,7 @@ public class ArmScaleScore extends CommandGroup {
 		addSequential(new IntakeSpeed(0.0));
 		addSequential(new ArmPosition(ArmControlMode.SENSORED, Arm.SCALE_ANGLE_SETPOINT));
 		addSequential(new ArmPistonPosition(ArmPistonState.RELEASE));
-		addSequential(new WaitCommand(0.35));
+		//addSequential(new WaitCommand(0.35));
 		addSequential(new ArmPistonPosition(ArmPistonState.SHOOT));
 		addSequential(new ArmPosition(ArmControlMode.SENSORED, 200));
 		addSequential(new WaitCommand(0.35));

@@ -57,18 +57,18 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static final double ENCODER_TICKS_TO_INCHES = 4096 * Math.PI * 4.0;
 	public static final int DRIVE_TICKS_PER_FOOT = 3978; //Move robot 10 feet, get position from sensor, divide by 10
 
-	public static final double LEFT_P = 0.1;
+	public static final double LEFT_P = 1.0;
 	public static final double LEFT_I = 0.0;
 	public static final double LEFT_D = 0.0;
 	public static final double LEFT_F = 1023/2700;
 
-	public static final double RIGHT_P = 0.1;
+	public static final double RIGHT_P = 1.0;
 	public static final double RIGHT_I = 0.0;
 	public static final double RIGHT_D = 0.0;
 	public static final double RIGHT_F = 1023/2700;
 
 	private VikingSRX leftDrive1;// Vel:5636u/100ms //5816u/100ms COMP
-	private WPI_VictorSPX leftDrive2;
+	private VikingSRX leftDrive2;
 
 	private VikingSRX rightDrive1;// Vel:5802u/100ms //5574u/100ms COMP
 	private WPI_VictorSPX rightDrive2;
@@ -85,7 +85,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		try {
 			leftDrive1 = new VikingSRX(RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID);
 			// leftDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
-			leftDrive2 = new WPI_VictorSPX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
+			leftDrive2 = new VikingSRX(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
 			// leftDrive1.setPID(LEFT_P, LEFT_I, LEFT_D);
 			leftDrive1.config_kP(0, LEFT_P, 10);
 			leftDrive1.config_kI(0, LEFT_I, 10);
@@ -120,7 +120,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 			rightDrive1.setSensorPhase(false);
 			leftDrive1.setSensorPhase(true);
-			//leftDrive1.setInverted(true);
 
 			leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -149,6 +148,16 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		 */
 	}
 
+	public void setSpeed(double speed1, double speed2) {
+		// if (speed == 0) {
+		/*
+		 * } else { setControlMode(DriveTrainControlMode.TEST); rightDrive1.set(speed);
+		 * leftDrive1.set(speed); }
+		 */
+		leftDrive1.set(speed1);
+		rightDrive1.set(speed2);
+	}
+	
 	public void driveWithJoystick() {
 		if (controlMode != DriveTrainControlMode.JOYSTICK || m_drive == null)
 			return;
