@@ -16,6 +16,7 @@ import org.frc.team2579.subsystems.Arm.ArmControlMode;
 import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -93,14 +94,14 @@ public class Robot extends TimedRobot {
 		driveTrain.setPeriodMs(10);
 		//controlLoop.start();
 
-		autonomousCommand = autonChooser.getSelected();
+		/*autonomousCommand = autonChooser.getSelected();
 		if (autonomousCommand != null) {
 			if(autonomousCommand instanceof CenterSwitchAuton) {
 				((CenterSwitchAuton) autonomousCommand).preInit();
 			}
 			autonomousCommand.start();
 		}
-		
+		*/
 	}
 
 	/**
@@ -110,11 +111,27 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		updateStatus();
-		Timer.delay(2);
-		driveTrain.setSpeed(-0.4, 0.4);
-		Timer.delay(1.9);
-		driveTrain.setSpeed(0, 0);
-		Timer.delay(5);
+		autonomousCommand = autonChooser.getSelected();
+		if(autonomousCommand instanceof CenterSwitchAuton) {
+			Timer.delay(2);
+			if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L'))
+				driveTrain.setSpeed(-0.3,0.65);
+			else
+				driveTrain.setSpeed(-0.65, 0.3);
+			Timer.delay(1.0);
+			driveTrain.setSpeed(-0.4, 0.4);
+			Timer.delay(1.0);
+			driveTrain.setSpeed(0, 0);
+			intake.setSpeed(-0.7);
+			Timer.delay(5);
+			intake.setSpeed(0);
+		}else{
+			Timer.delay(2.0);
+			driveTrain.setSpeed(-0.4, 0.4);
+			Timer.delay(1.9);
+			driveTrain.setSpeed(0, 0);
+			Timer.delay(5);
+		}
 	}
 
 	public void teleopInit() {

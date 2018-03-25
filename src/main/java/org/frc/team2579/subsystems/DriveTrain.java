@@ -60,12 +60,12 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	public static final double LEFT_P = 1.0;
 	public static final double LEFT_I = 0.0;
 	public static final double LEFT_D = 0.0;
-	public static final double LEFT_F = 1023/2700;
+	public static final double LEFT_F = 1023/5816;
 
 	public static final double RIGHT_P = 1.0;
 	public static final double RIGHT_I = 0.0;
 	public static final double RIGHT_D = 0.0;
-	public static final double RIGHT_F = 1023/2700;
+	public static final double RIGHT_F = 1023/5574;
 
 	private VikingSRX leftDrive1;// Vel:5636u/100ms //5816u/100ms COMP
 	private VikingSRX leftDrive2;
@@ -119,7 +119,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			rightDrive2.configPeakOutputReverse(-1, 10);
 
 			rightDrive1.setSensorPhase(false);
-			leftDrive1.setSensorPhase(true);
+			leftDrive1.setSensorPhase(false);
 
 			leftDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			rightDrive1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
