@@ -51,6 +51,7 @@ public class instrumentation {
 	}
 
 	/** round to six decimal places */
+	@SuppressWarnings("unused")
 	static private double round(double toround) {
 		long whole = (long) (toround * 1000000.0 + 0.5);
 		return ((double) whole) * 0.000001;

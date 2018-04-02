@@ -8,22 +8,15 @@ import org.frc.team2579.commands.JoystickDrive;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
-import com.ctre.phoenix.motion.TrajectoryPoint;
-import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import org.frc.team2579.utility.ControlLoopable;
 import org.frc.team2579.utility.Profile;
 import org.frc.team2579.utility.ProfileFollower;
 import org.frc.team2579.utility.VikingSRX;
-import org.frc.team2579.utility.instrumentation;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -73,12 +66,14 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	private VikingSRX rightDrive1;// Vel:5802u/100ms //5574u/100ms COMP
 	private WPI_VictorSPX rightDrive2;
 
+	@SuppressWarnings("unused")
 	private static MotionProfileStatus statusLeft, statusRight;
 
 	public ProfileFollower profileFollower;
 
 	private DifferentialDrive m_drive;
 
+	@SuppressWarnings("unused")
 	private static boolean isRunning;
 
 	public DriveTrain() {

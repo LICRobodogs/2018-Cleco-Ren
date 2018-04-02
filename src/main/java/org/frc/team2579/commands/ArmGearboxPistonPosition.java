@@ -14,6 +14,7 @@ public class ArmGearboxPistonPosition extends Command {
 
 	@Override
 	protected void initialize() {
+		Robot.arm.resetArmEncoder();
 		Robot.arm.setArmGearbox(state);
 	}
 

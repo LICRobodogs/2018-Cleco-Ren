@@ -3,19 +3,16 @@ package org.frc.team2579.subsystems;
 import org.frc.team2579.OI;
 import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
-import org.frc.team2579.subsystems.Intake.IntakePistonState;
 import org.frc.team2579.utility.ControlLoopable;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,8 +41,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 	private static double offset;
 	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.0 / 12.0;
 	public double mAngle;
-	public static final double SCALE_ANGLE_SETPOINT = 230;
-	public static final double SWITCH_ANGLE_SETPOINT = 80;
+	public final double SCALE_ANGLE_SETPOINT = 230;
+	public final double SWITCH_ANGLE_SETPOINT = 80;
 	public static double mArmOnTargetTolerance = 10;
 	public static double mArmKp = 1;// .45
 	public static double mArmKi = 0.0;
@@ -173,7 +170,10 @@ public class Arm extends Subsystem implements ControlLoopable {
 		// OI.getInstance().getOperatorGamepad().getRightYAxis() < 0.2)) {
 		// if(Intake.isIntakeIn())
 		// Intake.setIntakePiston(IntakePistonState.OUT);
-		armTalon.set(ControlMode.PercentOutput, -OI.getInstance().getDriverGamepad().getRightYAxis());
+		if(Math.abs(OI.getInstance().getDriverGamepad().getRightYAxis())>0.25)
+			armTalon.set(ControlMode.PercentOutput, -OI.getInstance().getDriverGamepad().getRightYAxis());
+		else
+			setArmAngle(ArmControlMode.HOLD,0);
 		// }
 	}
 
@@ -209,7 +209,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 					&& Math.abs(getAngleSetpoint() - Math.abs(getArmAngle())) < mArmOnTargetTolerance);
 	}
 
-	private double getAngleSetpoint() {
+	public double getAngleSetpoint() {
 		return armTalon.getClosedLoopTarget(0) / NATIVE_TO_ANGLE_FACTOR;
 	}
 

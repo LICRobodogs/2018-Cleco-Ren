@@ -1,16 +1,13 @@
 package org.frc.team2579.commands.auton;
 
 import org.frc.team2579.Robot;
-import org.frc.team2579.subsystems.DriveTrain;
-
-import com.ctre.phoenix.motion.SetValueMotionProfile;
-import com.ctre.phoenix.motorcontrol.*;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveMP extends Command {
 
+	@SuppressWarnings("unused")
 	private double[][] leftPoints, rightPoints;
+	@SuppressWarnings("unused")
 	private int leftNumPoints, rightNumPoints;
 
 	public DriveMP(double[][] leftPoints, int leftNumPoints, double[][] rightPoints, int rightNumPoints) {

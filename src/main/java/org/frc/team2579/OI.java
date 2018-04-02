@@ -1,32 +1,26 @@
 package org.frc.team2579;
 
 import org.frc.team2579.commands.ArmGearboxPistonPosition;
-import org.frc.team2579.commands.ArmGracefulDown;
 import org.frc.team2579.commands.ArmHome;
 import org.frc.team2579.commands.ArmPistonPosition;
-import org.frc.team2579.commands.ArmPosition;
-import org.frc.team2579.commands.ArmScaleScore;
-import org.frc.team2579.commands.ArmSwitchScore;
+import org.frc.team2579.commands.ArmScale;
+import org.frc.team2579.commands.ArmScore;
+import org.frc.team2579.commands.ArmSwitch;
 import org.frc.team2579.commands.IntakeDown;
 import org.frc.team2579.commands.IntakeInnerWheelPosition;
 import org.frc.team2579.commands.IntakePosition;
 import org.frc.team2579.commands.IntakeQuickInOut;
-import org.frc.team2579.commands.IntakeRotate;
 import org.frc.team2579.commands.IntakeSpeed;
 import org.frc.team2579.commands.IntakeSpeedOff;
-import org.frc.team2579.commands.IntakeUnstuck;
 import org.frc.team2579.commands.IntakeUp;
 import org.frc.team2579.controller.GamePad;
 import org.frc.team2579.controller.GamePad.DPadButton;
 import org.frc.team2579.controller.GamePadTriggerButton;
-import org.frc.team2579.subsystems.Arm;
-import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.Intake.IntakePistonState;
 
 import edu.wpi.first.wpilibj.buttons.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.frc.team2579.subsystems.Arm.ArmControlMode;
 import org.frc.team2579.subsystems.Arm.ArmGearboxState;
 import org.frc.team2579.subsystems.Arm.ArmPistonState;
 
@@ -52,10 +46,13 @@ public class OI {
 		armHome.whenPressed(new ArmHome());
 
 		JoystickButton armSwitch = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.B_BUTTON);
-		armSwitch.whenPressed(new ArmSwitchScore());
+		armSwitch.whenPressed(new ArmSwitch());
 
 		JoystickButton armScale = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.Y_BUTTON);
-		armScale.whenPressed(new ArmScaleScore());
+		armScale.whenPressed(new ArmScale());
+		
+		JoystickButton armScore = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.X_BUTTON);
+		armScore.whenPressed(new ArmScore());
 
 		DPadButton armGearboxDogArm = new DPadButton(m_driverGamepad, DPadButton.Direction.RIGHT);
 		armGearboxDogArm.whenPressed(new ArmGearboxPistonPosition(ArmGearboxState.ARM_DOG));

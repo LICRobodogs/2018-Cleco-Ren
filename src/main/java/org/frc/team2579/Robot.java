@@ -8,16 +8,19 @@
 package org.frc.team2579;
 
 import org.frc.team2579.commands.auton.CenterSwitchAuton;
+import org.frc.team2579.commands.auton.LeftSideScale;
+import org.frc.team2579.commands.auton.RightSideScale;
 import org.frc.team2579.commands.auton.StraightOnly;
 import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.DriveTrain;
 import org.frc.team2579.subsystems.Intake;
+import org.frc.team2579.subsystems.Intake.IntakePistonState;
 import org.frc.team2579.subsystems.Arm.ArmControlMode;
+import org.frc.team2579.subsystems.Arm.ArmPistonState;
 import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -45,6 +48,9 @@ public class Robot extends TimedRobot {
 	public static final ControlLooper controlLoop = new ControlLooper("Main control loop", 10);
 	public static OI oi;
 
+	@SuppressWarnings("unused")
+	private boolean hasRun;
+
 	public static enum OperationMode {
 		TEST, COMPETITION
 	};
@@ -57,6 +63,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		hasRun = false;
 		driveTrain = new DriveTrain();
 		intake = new Intake();
 		arm = new Arm();
@@ -112,26 +119,78 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 		updateStatus();
 		autonomousCommand = autonChooser.getSelected();
-		if(autonomousCommand instanceof CenterSwitchAuton) {
-			Timer.delay(2);
-			if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L'))
-				driveTrain.setSpeed(-0.3,0.65);
-			else
-				driveTrain.setSpeed(-0.65, 0.3);
-			Timer.delay(1.0);
-			driveTrain.setSpeed(-0.4, 0.4);
-			Timer.delay(1.0);
-			driveTrain.setSpeed(0, 0);
-			intake.setSpeed(-0.7);
-			Timer.delay(5);
-			intake.setSpeed(0);
-		}else{
-			Timer.delay(2.0);
-			driveTrain.setSpeed(-0.4, 0.4);
-			Timer.delay(1.9);
-			driveTrain.setSpeed(0, 0);
-			Timer.delay(5);
-		}
+//TEST FIRST//if(!hasRun) { hasRun = true;
+			if(autonomousCommand instanceof CenterSwitchAuton) {
+				Timer.delay(2);
+				if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L'))
+					driveTrain.setSpeed(-0.3,0.65);
+				else
+					driveTrain.setSpeed(-0.65, 0.3);
+				Timer.delay(1.0);
+				driveTrain.setSpeed(-0.4, 0.4);
+				Timer.delay(1.0);
+				driveTrain.setSpeed(0, 0);
+				intake.setSpeed(-0.7);
+				Timer.delay(5);
+				intake.setSpeed(0);
+			}else if(autonomousCommand instanceof StraightOnly){
+				Timer.delay(2.0);
+				driveTrain.setSpeed(-0.4, 0.4);
+				Timer.delay(1.9);
+				driveTrain.setSpeed(0, 0);
+				Timer.delay(5);
+			}else if(autonomousCommand instanceof LeftSideScale){
+				if(DriverStation.getInstance().getGameSpecificMessage().charAt(1)==('L')) {
+					intake.setIntakePiston(IntakePistonState.DOWN);
+					intake.setIntakePiston(IntakePistonState.OUT);
+					intake.setSpeed(-0.7);
+					Timer.delay(0.5);
+					arm.setArmAngle(ArmControlMode.SENSORED, 210);
+					Timer.delay(2.0);
+					driveTrain.setSpeed(-0.4, 0.4);
+					Timer.delay(4.0);
+					driveTrain.setSpeed(0, 0);
+					arm.setArmPiston(ArmPistonState.RELEASE);
+					arm.setArmPiston(ArmPistonState.SHOOT);
+					Timer.delay(1.0);
+					driveTrain.setSpeed(0.4, -0.4);
+					Timer.delay(1.9);
+					driveTrain.setSpeed(0, 0);
+					arm.setArmAngle(ArmControlMode.MANUAL, 0);
+				}else {
+					Timer.delay(2.0);
+					driveTrain.setSpeed(-0.4, 0.4);
+					Timer.delay(1.9);
+					driveTrain.setSpeed(0, 0);
+					Timer.delay(5);
+				}
+			}else if(autonomousCommand instanceof RightSideScale) {
+				if(DriverStation.getInstance().getGameSpecificMessage().charAt(1)==('R')) {
+					intake.setIntakePiston(IntakePistonState.DOWN);
+					intake.setIntakePiston(IntakePistonState.OUT);
+					intake.setSpeed(-0.7);
+					Timer.delay(0.5);
+					arm.setArmAngle(ArmControlMode.SENSORED, 210);
+					Timer.delay(2.0);
+					driveTrain.setSpeed(-0.4, 0.4);
+					Timer.delay(4.0);
+					driveTrain.setSpeed(0, 0);
+					arm.setArmPiston(ArmPistonState.RELEASE);
+					arm.setArmPiston(ArmPistonState.SHOOT);
+					Timer.delay(1.0);
+					driveTrain.setSpeed(0.4, -0.4);
+					Timer.delay(1.9);
+					driveTrain.setSpeed(0, 0);
+					arm.setArmAngle(ArmControlMode.MANUAL, 0);
+				}else {
+					Timer.delay(2.0);
+					driveTrain.setSpeed(-0.4, 0.4);
+					Timer.delay(1.9);
+					driveTrain.setSpeed(0, 0);
+					Timer.delay(5);
+				}
+			}
+		//}
 	}
 
 	public void teleopInit() {
@@ -183,6 +242,8 @@ public class Robot extends TimedRobot {
 		autonChooser = new SendableChooser<>();
 		autonChooser.addDefault("Straight Only", new StraightOnly());
 		autonChooser.addObject("Center Switch", new CenterSwitchAuton());
+		autonChooser.addObject("Left Side Scale", new LeftSideScale());
+		autonChooser.addObject("Right Side Scale", new RightSideScale());
 		autonChooser.addObject("Do Nothing", new CommandGroup());
 		SmartDashboard.putData("Auton Setting", autonChooser);
 	}

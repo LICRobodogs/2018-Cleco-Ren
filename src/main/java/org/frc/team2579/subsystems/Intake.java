@@ -7,7 +7,6 @@ import org.frc.team2579.utility.ControlLoopable;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -15,8 +14,6 @@ public class Intake extends Subsystem implements ControlLoopable {
 	public static enum IntakePistonState {
 		UP, DOWN, IN, OUT
 	};
-
-	private boolean unstuck, rotate;
 
 	public static final double INTAKE_LOAD_SPEED = 0.65;
 	public static final double INTAKE_EJECT_SPEED = -0.55;
@@ -38,11 +35,9 @@ public class Intake extends Subsystem implements ControlLoopable {
 	}
 
 	public void setStuck(boolean u) {
-		this.unstuck = u;
 	}
 
 	public void setRotate(boolean r) {
-		this.rotate = r;
 	}
 
 	public double getRightTriggerAxis() {
@@ -105,7 +100,7 @@ public class Intake extends Subsystem implements ControlLoopable {
 		return innerWheelPiston.get() == Value.kForward;
 	}
 
-	public static void setIntakePiston(IntakePistonState state) {
+	public void setIntakePiston(IntakePistonState state) {
 		if (state == IntakePistonState.DOWN) {
 			intakePiston.set(Value.kForward);
 		} else if (state == IntakePistonState.UP) {

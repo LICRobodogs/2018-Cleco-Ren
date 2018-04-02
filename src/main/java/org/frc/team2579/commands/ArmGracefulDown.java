@@ -1,12 +1,7 @@
 package org.frc.team2579.commands;
 
 import org.frc.team2579.Robot;
-import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.Arm.ArmControlMode;
-import org.frc.team2579.subsystems.Arm.ArmPistonState;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ArmGracefulDown extends Command {

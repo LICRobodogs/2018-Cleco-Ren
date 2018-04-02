@@ -1,13 +1,7 @@
 package org.frc.team2579.commands;
 
 import org.frc.team2579.Robot;
-import org.frc.team2579.controller.GamePad;
-import org.frc.team2579.subsystems.Arm.ArmPistonState;
-import org.frc.team2579.subsystems.Intake;
-import org.frc.team2579.subsystems.Intake.IntakePistonState;
-
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeSpeed extends Command {
 

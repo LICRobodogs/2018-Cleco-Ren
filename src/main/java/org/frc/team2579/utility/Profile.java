@@ -3,7 +3,6 @@ package org.frc.team2579.utility;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import edu.wpi.first.wpilibj.DriverStation;
 
-import org.frc.team2579.Robot;
 import org.frc.team2579.subsystems.DriveTrain;
 
 import java.util.List;
