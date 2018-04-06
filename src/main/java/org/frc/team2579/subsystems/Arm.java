@@ -32,7 +32,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 
 	private ArmControlMode controlMode = ArmControlMode.SENSORED;
 
-	public static DoubleSolenoid clawPiston, shootPiston, shiftPiston;
+	public static DoubleSolenoid clawPiston, shootPiston, shiftPiston, climbPiston;
 	private WPI_TalonSRX armTalon;
 	private WPI_VictorSPX armFollower1;
 	private WPI_VictorSPX armFollower2;
@@ -59,7 +59,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 			clawPiston = new DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID, RobotMap.CLAW_OUT_PCM_ID);
 			shootPiston = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID, RobotMap.SHOOT_OUT_PCM_ID);
 			shiftPiston = new DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID, RobotMap.SHIFT_OUT_PCM_ID);
-
+			climbPiston = new DoubleSolenoid(RobotMap.CLIMB_IN_PCM2_ID, RobotMap.CLIMB_OUT_PCM2_ID);
+			
 			homeLimit = new DigitalInput(RobotMap.ARM_HOME_LIMIT_PORT);
 
 			armTalon = new WPI_TalonSRX(RobotMap.ARM_TALON1_CAN_ID);
@@ -105,7 +106,9 @@ public class Arm extends Subsystem implements ControlLoopable {
 		} else if (state == ArmPistonState.RELEASE) {
 			clawPiston.set(Value.kReverse);
 		} else if (state == ArmPistonState.CLIMB_OUT) {
-			
+			climbPiston.set(Value.kForward);
+		} else if (state == ArmPistonState.CLIMB_IN) {
+			climbPiston.set(Value.kReverse);
 		}
 	}
 

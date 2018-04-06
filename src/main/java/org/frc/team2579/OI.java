@@ -53,7 +53,13 @@ public class OI {
 		
 		JoystickButton armScore = new JoystickButton(m_driverGamepad.getJoyStick(), GamePad.X_BUTTON);
 		armScore.whenPressed(new ArmScore());
+		
+		DPadButton climbPistonOut = new DPadButton(m_driverGamepad, DPadButton.Direction.UP);
+		climbPistonOut.whenPressed(new ArmPistonPosition(ArmPistonState.CLIMB_OUT));
 
+		DPadButton climbPistonIn = new DPadButton(m_driverGamepad, DPadButton.Direction.DOWN);
+		climbPistonIn.whenPressed(new ArmPistonPosition(ArmPistonState.CLIMB_IN));
+		
 		DPadButton armGearboxDogArm = new DPadButton(m_driverGamepad, DPadButton.Direction.RIGHT);
 		armGearboxDogArm.whenPressed(new ArmGearboxPistonPosition(ArmGearboxState.ARM_DOG));
 
