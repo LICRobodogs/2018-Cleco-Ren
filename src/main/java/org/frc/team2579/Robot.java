@@ -11,6 +11,7 @@ import org.frc.team2579.commands.auton.CenterSwitchAuton;
 import org.frc.team2579.commands.auton.LeftSideScale;
 import org.frc.team2579.commands.auton.RightSideScale;
 import org.frc.team2579.commands.auton.StraightOnly;
+import org.frc.team2579.commands.auton.TwoCubeCenterAuton;
 import org.frc.team2579.subsystems.Arm;
 import org.frc.team2579.subsystems.DriveTrain;
 import org.frc.team2579.subsystems.Intake;
@@ -120,7 +121,7 @@ public class Robot extends TimedRobot {
 		updateStatus();
 		autonomousCommand = autonChooser.getSelected();
 		if(!hasRun) { hasRun = true;
-			if(autonomousCommand instanceof CenterSwitchAuton) {
+			if(autonomousCommand instanceof CenterSwitchAuton || autonomousCommand instanceof TwoCubeCenterAuton) {
 				Timer.delay(2);
 				if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L'))
 					driveTrain.setSpeed(-0.3,0.65);
@@ -133,6 +134,22 @@ public class Robot extends TimedRobot {
 				intake.setSpeed(-0.55);
 				Timer.delay(5);
 				intake.setSpeed(0);
+				if(autonomousCommand instanceof TwoCubeCenterAuton) {
+					driveTrain.setSpeed(0.4, -0.4);
+					Timer.delay(1.25);
+					if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L'))
+						driveTrain.setSpeed(0.3,-0.65);
+					else
+						driveTrain.setSpeed(0.65, -0.3);
+					Timer.delay(1.0);
+					intake.setIntakePiston(IntakePistonState.OUT);
+					intake.setSpeed(-0.7);
+					driveTrain.setSpeed(-0.4, 0.4);
+					Timer.delay(.65);
+					driveTrain.setSpeed(0, 0);
+					Timer.delay(3.0);
+					intake.setSpeed(0.0);
+				}
 			}else if(autonomousCommand instanceof StraightOnly){
 				Timer.delay(2.0);
 				driveTrain.setSpeed(-0.4, 0.4);
@@ -244,6 +261,7 @@ public class Robot extends TimedRobot {
 		autonChooser.addObject("Center Switch", new CenterSwitchAuton());
 		autonChooser.addObject("Left Side Scale", new LeftSideScale());
 		autonChooser.addObject("Right Side Scale", new RightSideScale());
+		autonChooser.addObject("TWO CUBE Center Switch", new TwoCubeCenterAuton());
 		autonChooser.addObject("Do Nothing", new CommandGroup());
 		SmartDashboard.putData("Auton Setting", autonChooser);
 	}
