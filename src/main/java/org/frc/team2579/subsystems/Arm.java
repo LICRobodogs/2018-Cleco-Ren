@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Arm extends Subsystem implements ControlLoopable {
 	public static enum ArmPistonState {
-		GRAB, RELEASE, SHOOT, RELOAD
+		GRAB, RELEASE, SHOOT, RELOAD, CLIMB_OUT, CLIMB_IN
 	}
 
 	public static enum ArmGearboxState {
@@ -39,7 +39,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 
 	private static final double NATIVE_TO_ANGLE_FACTOR = (80 / 12) * (60 / 14);
 	private static double offset;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.0 / 12.0;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.20 / 12.0;
 	public double mAngle;
 	public final double SCALE_ANGLE_SETPOINT = 230;
 	public final double SWITCH_ANGLE_SETPOINT = 80;
@@ -104,6 +104,8 @@ public class Arm extends Subsystem implements ControlLoopable {
 			clawPiston.set(Value.kForward);
 		} else if (state == ArmPistonState.RELEASE) {
 			clawPiston.set(Value.kReverse);
+		} else if (state == ArmPistonState.CLIMB_OUT) {
+			
 		}
 	}
 

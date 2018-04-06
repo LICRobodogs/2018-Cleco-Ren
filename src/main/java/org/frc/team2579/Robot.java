@@ -128,9 +128,9 @@ public class Robot extends TimedRobot {
 					driveTrain.setSpeed(-0.65, 0.3);
 				Timer.delay(1.0);
 				driveTrain.setSpeed(-0.4, 0.4);
-				Timer.delay(1.0);
+				Timer.delay(1.25);
 				driveTrain.setSpeed(0, 0);
-				intake.setSpeed(-0.7);
+				intake.setSpeed(-0.55);
 				Timer.delay(5);
 				intake.setSpeed(0);
 			}else if(autonomousCommand instanceof StraightOnly){

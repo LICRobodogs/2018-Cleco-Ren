@@ -31,8 +31,8 @@ public class RobotMap {
 	public static final int INTAKE_UP_PCM_ID = 7;
 	public static final int INTAKE_DOWN_PCM_ID = 0;
 
-	public static final int INTAKE_WHEEL_IN_PCM2_ID = 6;
-	public static final int INTAKE_WHEEL_OUT_PCM2_ID = 1;
+	public static final int INTAKE_WHEEL_IN_PCM2_ID = 1;
+	public static final int INTAKE_WHEEL_OUT_PCM2_ID = 6;
 
 	public static final int CLAW_IN_PCM_ID = 5;
 	public static final int CLAW_OUT_PCM_ID = 2;
