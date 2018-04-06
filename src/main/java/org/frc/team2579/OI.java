@@ -1,5 +1,6 @@
 package org.frc.team2579;
 
+import org.frc.team2579.commands.ArmEmergency;
 import org.frc.team2579.commands.ArmGearboxPistonPosition;
 import org.frc.team2579.commands.ArmHome;
 import org.frc.team2579.commands.ArmPistonPosition;
@@ -98,6 +99,10 @@ public class OI {
 
 		// Pneumatics Diagonostics
 
+		Button armEmergency = new InternalButton();
+		armEmergency.whileHeld(new ArmEmergency());
+		SmartDashboard.putData("EMERGENCY", armEmergency);
+		
 		Button testIntakeUp = new InternalButton();
 		testIntakeUp.whenPressed(new IntakePosition(IntakePistonState.UP));
 		SmartDashboard.putData("Intake Outer UP", testIntakeUp);

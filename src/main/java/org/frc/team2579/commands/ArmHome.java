@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class ArmHome extends CommandGroup {
 	public ArmHome() {
 		if(Robot.arm.getAngleSetpoint()>Robot.arm.SWITCH_ANGLE_SETPOINT) {
-			addSequential(new ArmPosition(ArmControlMode.SENSORED, 200));
+			addSequential(new ArmPosition(ArmControlMode.SENSORED, 160));
 			addSequential(new WaitCommand(0.35));
 		}
 		addSequential(new ArmGracefulDown());

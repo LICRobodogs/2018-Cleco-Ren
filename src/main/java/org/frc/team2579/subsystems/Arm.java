@@ -59,7 +59,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 			clawPiston = new DoubleSolenoid(RobotMap.CLAW_IN_PCM_ID, RobotMap.CLAW_OUT_PCM_ID);
 			shootPiston = new DoubleSolenoid(RobotMap.SHOOT_IN_PCM_ID, RobotMap.SHOOT_OUT_PCM_ID);
 			shiftPiston = new DoubleSolenoid(RobotMap.SHIFT_IN_PCM_ID, RobotMap.SHIFT_OUT_PCM_ID);
-			climbPiston = new DoubleSolenoid(RobotMap.CLIMB_IN_PCM2_ID, RobotMap.CLIMB_OUT_PCM2_ID);
+			climbPiston = new DoubleSolenoid(1,RobotMap.CLIMB_IN_PCM2_ID, RobotMap.CLIMB_OUT_PCM2_ID);
 			
 			homeLimit = new DigitalInput(RobotMap.ARM_HOME_LIMIT_PORT);
 
@@ -155,7 +155,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 		 * }else if (controlMode == ArmControlMode.SENSORED) { //moveWithFeedBack(); //}
 		 */
 
-		if (homeLimit.get()) {
+		if (!homeLimit.get()) {
 			resetArmEncoder();
 		}
 	}
@@ -179,6 +179,18 @@ public class Arm extends Subsystem implements ControlLoopable {
 			armTalon.set(ControlMode.PercentOutput, -OI.getInstance().getDriverGamepad().getRightYAxis());
 		else
 			setArmAngle(ArmControlMode.HOLD,0);
+		// }
+	}
+	
+	public void moveWithJoystickEmergency() {
+		// setArmAngle(ArmControlMode.MANUAL,OI.getInstance().getOperatorGamepad().getRightYAxis()
+		// * 4096);
+		// if(!(getArmAngle() < 2 &&
+		// OI.getInstance().getOperatorGamepad().getRightYAxis() < 0.2)) {
+		// if(Intake.isIntakeIn())
+		// Intake.setIntakePiston(IntakePistonState.OUT);
+		if(Math.abs(OI.getInstance().getDriverGamepad().getRightYAxis())>0.25)
+			armTalon.set(ControlMode.PercentOutput, -OI.getInstance().getDriverGamepad().getRightYAxis()*0.4);
 		// }
 	}
 
@@ -242,7 +254,7 @@ public class Arm extends Subsystem implements ControlLoopable {
 	}
 
 	public boolean isHome() {
-		return homeLimit.get();
+		return !homeLimit.get();
 	}
 
 	@Override

@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 		updateStatus();
 		autonomousCommand = autonChooser.getSelected();
-//TEST FIRST//if(!hasRun) { hasRun = true;
+		if(!hasRun) { hasRun = true;
 			if(autonomousCommand instanceof CenterSwitchAuton) {
 				Timer.delay(2);
 				if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L'))
@@ -190,7 +190,7 @@ public class Robot extends TimedRobot {
 					Timer.delay(5);
 				}
 			}
-		//}
+		}
 	}
 
 	public void teleopInit() {
