@@ -12,7 +12,7 @@ public class RobotMap {
 	public static final int OPERATOR_GAMEPAD_USB_ID = 1;
 
 	// LIMIT SWITCHES
-	public static final int ARM_HOME_LIMIT_PORT = 9;
+	public static final int ARM_HOME_LIMIT_PORT = 0;
 
 	// MOTORS
 	public static final int DRIVETRAIN_LEFT_MOTOR1_CAN_ID = 0;

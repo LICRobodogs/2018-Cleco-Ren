@@ -12,8 +12,8 @@ public class ArmSwitch extends CommandGroup {
 	public ArmSwitch() {
 		addSequential(new ArmPistonPosition(ArmPistonState.GRAB));
 		addSequential(new IntakeInnerWheelPosition(IntakePistonState.OUT));
-		addSequential(new IntakeSpeed(-0.7));
-		addSequential(new WaitCommand(0.45));
+		addSequential(new IntakeSpeed(-1.0));
+		addSequential(new WaitCommand(1.0));
 		addSequential(new IntakeSpeed(0.0));
 		addSequential(new ArmPosition(ArmControlMode.SENSORED, Robot.arm.SWITCH_ANGLE_SETPOINT));
 //		addSequential(new ArmPistonPosition(ArmPistonState.RELEASE));

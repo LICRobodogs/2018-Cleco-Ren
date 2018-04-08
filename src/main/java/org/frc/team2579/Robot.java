@@ -21,6 +21,7 @@ import org.frc.team2579.subsystems.Arm.ArmPistonState;
 import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -78,6 +79,7 @@ public class Robot extends TimedRobot {
 		 * SmartDashboard.putData("Auto choices", m_chooser);
 		 */
 		setupAutonChooser();
+		//CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**
@@ -138,14 +140,14 @@ public class Robot extends TimedRobot {
 					driveTrain.setSpeed(0.4, -0.4);
 					Timer.delay(1.25);
 					if(DriverStation.getInstance().getGameSpecificMessage().charAt(0)==('L'))
-						driveTrain.setSpeed(0.3,-0.65);
+						driveTrain.setSpeed(0.3,-0.5);
 					else
-						driveTrain.setSpeed(0.65, -0.3);
+						driveTrain.setSpeed(0.5, -0.3);
 					Timer.delay(1.0);
 					intake.setIntakePiston(IntakePistonState.OUT);
 					intake.setSpeed(-0.7);
 					driveTrain.setSpeed(-0.4, 0.4);
-					Timer.delay(.65);
+					Timer.delay(1.5);
 					driveTrain.setSpeed(0, 0);
 					Timer.delay(3.0);
 					intake.setSpeed(0.0);
@@ -257,8 +259,8 @@ public class Robot extends TimedRobot {
 
 	public void setupAutonChooser() {
 		autonChooser = new SendableChooser<>();
-		autonChooser.addDefault("Straight Only", new StraightOnly());
-		autonChooser.addObject("Center Switch", new CenterSwitchAuton());
+		autonChooser.addObject("Straight Only", new StraightOnly());
+		autonChooser.addDefault("Center Switch", new CenterSwitchAuton());
 		autonChooser.addObject("Left Side Scale", new LeftSideScale());
 		autonChooser.addObject("Right Side Scale", new RightSideScale());
 		autonChooser.addObject("TWO CUBE Center Switch", new TwoCubeCenterAuton());

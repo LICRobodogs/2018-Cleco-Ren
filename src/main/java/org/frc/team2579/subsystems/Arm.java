@@ -39,12 +39,12 @@ public class Arm extends Subsystem implements ControlLoopable {
 
 	private static final double NATIVE_TO_ANGLE_FACTOR = (80 / 12) * (60 / 14);
 	private static double offset;
-	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.20 / 12.0;
+	private static final double ARM_MOTOR_VOLTAGE_PERCENT_LIMIT = 4.75 / 12.0;
 	public double mAngle;
 	public final double SCALE_ANGLE_SETPOINT = 230;
 	public final double SWITCH_ANGLE_SETPOINT = 80;
 	public static double mArmOnTargetTolerance = 10;
-	public static double mArmKp = 1;// .45
+	public static double mArmKp = 1.2;// .45
 	public static double mArmKi = 0.0;
 	public static double mArmKd = 0.25;// .25
 	public static double mArmKf = 0.0;
@@ -213,6 +213,11 @@ public class Arm extends Subsystem implements ControlLoopable {
 		SmartDashboard.putString("TALON MODE: ", armTalon.getControlMode().toString());
 		SmartDashboard.putString("ARM CONTROL MODE: ", controlMode.toString());
 		SmartDashboard.putNumber("mAngle: ", mAngle);
+		if(clawPiston.get()==Value.kForward) {
+			SmartDashboard.putString("CLAW IS", "GRABBED");
+		}else if(clawPiston.get()==Value.kReverse) {
+			SmartDashboard.putString("CLAW IS", "RELEASED");
+		}
 		if (operationMode == Robot.OperationMode.TEST) {
 		}
 	}
